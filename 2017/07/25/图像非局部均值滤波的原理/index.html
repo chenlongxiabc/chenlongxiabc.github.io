@@ -103,7 +103,7 @@
 <meta property="og:description" content="简介图像非局部均值滤波的原理利用了噪声的非相关的特性。如下图所示，在一幅图像中，具有相同像素的图像块是很多的，而其中的噪声是不相关的,当然不相关的假设是很强的，这里应该说是噪声的相关性很弱，该假设也是符合一定的实际应用场景的。 原理分析推导我们假设无噪声像素块的值为$f(x,y)$，加性噪声为$n(x,y)$,那么添加噪声后的像素块的值为$g(x,y)=f(x,y)+n(x,y)$。我们把多个相似">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/filter.jpg">
-<meta property="og:updated_time" content="2017-08-09T07:54:57.615Z">
+<meta property="og:updated_time" content="2017-08-09T13:05:30.624Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图像非局部均值滤波的原理">
 <meta name="twitter:description" content="简介图像非局部均值滤波的原理利用了噪声的非相关的特性。如下图所示，在一幅图像中，具有相同像素的图像块是很多的，而其中的噪声是不相关的,当然不相关的假设是很强的，这里应该说是噪声的相关性很弱，该假设也是符合一定的实际应用场景的。 原理分析推导我们假设无噪声像素块的值为$f(x,y)$，加性噪声为$n(x,y)$,那么添加噪声后的像素块的值为$g(x,y)=f(x,y)+n(x,y)$。我们把多个相似">
@@ -389,7 +389,7 @@
         <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>图像非局部均值滤波的原理利用了噪声的非相关的特性。如下图所示，在一幅图像中，具有相同像素的图像块是很多的，而其中的噪声是不相关的,当然不相关的假设是很强的，这里应该说是噪声的相关性很弱，该假设也是符合一定的实际应用场景的。<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/filter.jpg" alt="Image"></p>
 <h2 id="原理分析推导"><a href="#原理分析推导" class="headerlink" title="原理分析推导"></a>原理分析推导</h2><p>我们假设无噪声像素块的值为$f(x,y)$，加性噪声为$n(x,y)$,那么添加噪声后的像素块的值为$g(x,y)=f(x,y)+n(x,y)$。我们把多个相似的像素块进行叠加后取均值得到$\overline{g}(x,y)=\frac{1}{K}\sum_{i=1}^{K}g_i(x,y)$。此处应注意相似是个模糊的概念，以量化的观点看是两个相似块间的距离大小，这个距离可以是欧式距离等，为了对原理进行粗略的说明，下面的推导中把相似的概念强化了。应用概率的观点，我们对叠加处理取平均后的像素块求期望得到，$$E[{\overline{g}(x,y)]}=\frac{1}{K}\sum_{i=1}^{K}(E[f_i(x,y)]+E[n(x,y)])$$.<br>由于像素块的相似性，上式中右边式子的第一项化简为$f(x,y)$，第二项由于假设噪声的均值为0，所以$$E[\overline{g}(x,y)]=f(x,y)$$.另外由于噪声的非相关性，我们可以得到$g(x,y)$的方差计算公式为$${\sigma_{\overline{g}}}^2={\sigma_f}^2+\frac{1}{K^2}({\sigma_{\eta_1}}^2+{\sigma_{\eta_2}}^2+\dots+{\sigma_{\eta_{K}}}^2)$$<br>所以，最后推导出的方差为：<br>$${\sigma_{\overline{g}}}^2=\frac{K}{K^2}{\sigma_{\eta}}^2=\frac{1}{K}{\sigma_{\eta}}^2$$.<br>其中${\sigma_f}^2$为无噪声的像素块的方差值为0.</p>
 <p>由此可见，通过非局部均值的方法可以进行图像的去噪。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文是在阅读论文<a href="http://www.ipol.im/pub/art/2011/bcm_nlm/" target="_blank" rel="external">“Non-Local Means Denoising”</a>后编写的，其中的假设推倒参考了圣经《数字图像处理》,若有错误，欢迎讨论。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文是在阅读论文<a href="http://www.ipol.im/pub/art/2011/bcm_nlm/" target="_blank" rel="external">“Non-Local Means Denoising”</a>后编写的，其中的假设推倒参考了圣经《数字图像处理》,若有错误，欢迎讨论。禁止转载、抄袭。</p>
 
       
     </div>
