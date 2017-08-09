@@ -103,7 +103,8 @@
 <meta property="og:description" content="矩阵空间分析矩阵和线性空间有着密不可分的关系。在矩阵$A\in R^{m \times n}$中存在着四种简单的空间，分别是列空间用$C(A)$表示，即矩阵的列向量组成的空间，进一步说是矩阵的不相关的列向量形成的空间。与列空间正交的空间是其对应的零空间即$N(A^{T})$，零空间是由$A^{T}X=0$的解向量形成的空间。列空间的维度等于矩阵的秩$r(A)$，而$N(A^{T})$零空间的维度是">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/space.jpg">
-<meta property="og:updated_time" content="2017-08-09T10:58:16.919Z">
+<meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/project.jpg">
+<meta property="og:updated_time" content="2017-08-09T11:34:23.544Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="投影矩阵与最小二乘">
 <meta name="twitter:description" content="矩阵空间分析矩阵和线性空间有着密不可分的关系。在矩阵$A\in R^{m \times n}$中存在着四种简单的空间，分别是列空间用$C(A)$表示，即矩阵的列向量组成的空间，进一步说是矩阵的不相关的列向量形成的空间。与列空间正交的空间是其对应的零空间即$N(A^{T})$，零空间是由$A^{T}X=0$的解向量形成的空间。列空间的维度等于矩阵的秩$r(A)$，而$N(A^{T})$零空间的维度是">
@@ -389,7 +390,7 @@
         <h2 id="矩阵空间分析"><a href="#矩阵空间分析" class="headerlink" title="矩阵空间分析"></a>矩阵空间分析</h2><p>矩阵和线性空间有着密不可分的关系。在矩阵$A\in R^{m \times n}$中存在着四种简单的空间，分别是列空间用$C(A)$表示，即矩阵的列向量组成的空间，进一步说是矩阵的不相关的列向量形成的空间。与列空间正交的空间是其对应的零空间即$N(A^{T})$，零空间是由$A^{T}X=0$的解向量形成的空间。列空间的维度等于矩阵的秩$r(A)$，而$N(A^{T})$零空间的维度是$m-r(A)$。至于零空间$N(A^{T})$和列向量空间正交的原因很简单$\left[<br>\begin{array}{c}<br>a_1^{T}\\<br>a_2^{T}\\<br>\vdots\\<br>a_n^{n}<br>\end{array}<br>\right]\mathbf{x}=<br>\left[<br>\begin{array}{c}<br>0\\<br>0\\<br>\vdots\\<br>0<br>\end{array}<br>\right]$即空间中向量满足正交性。</p>
 <p>另外两个空间就是行向量形成的空间$C(A^{T})$和与其对应的零空间$N(A)$。行空间的维度等于矩阵的秩$r(A)$，对应的零空间的维度是$n-r(A)$。它们之间的维度关系可以从矩阵方程解的角度去考虑，因为在基础解系中所含向量的个数等于$n-r(A)$即其中一种零空间的维度。空间之间的正交关系其实也是一种正交互补的关系。</p>
 <p>四种空间的图形示意为：<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/space.jpg" alt="space"></p>
-<h2 id="投影矩阵"><a href="#投影矩阵" class="headerlink" title="投影矩阵"></a>投影矩阵</h2><p>我们假设无噪声像素块的值为$f(x,y)$，加性噪声为$n(x,y)$,那么添加噪声后的像素块的值为$g(x,y)=f(x,y)+n(x,y)$。我们把多个相似的像素块进行叠加后取均值得到$\overline{g}(x,y)=\frac{1}{K}\sum_{i=1}^{K}g_i(x,y)$。此处应注意相似是个模糊的概念，以量化的观点看是两个相似块间的距离大小，这个距离可以是欧式距离等，为了对原理进行粗略的说明，下面的推导中把相似的概念强化了。应用概率的观点，我们对叠加处理取平均后的像素块求期望得到，$$E[{\overline{g}(x,y)]}=\frac{1}{K}\sum_{i=1}^{K}(E[f_i(x,y)]+E[n(x,y)])$$.<br>由于像素块的相似性，上式中右边式子的第一项化简为$f(x,y)$，第二项由于假设噪声的均值为0，所以$$E[\overline{g}(x,y)]=f(x,y)$$.另外由于噪声的非相关性，我们可以得到$g(x,y)$的方差计算公式为$${\sigma_{\overline{g}}}^2={\sigma_f}^2+\frac{1}{K^2}({\sigma_{\eta_1}}^2+{\sigma_{\eta_2}}^2+\dots+{\sigma_{\eta_{K}}}^2)$$<br>所以，最后推导出的方差为：<br>$${\sigma_{\overline{g}}}^2=\frac{K}{K^2}{\sigma_{\eta}}^2=\frac{1}{K}{\sigma_{\eta}}^2$$.<br>其中${\sigma_f}^2$为无噪声的像素块的方差值为0.</p>
+<h2 id="投影矩阵"><a href="#投影矩阵" class="headerlink" title="投影矩阵"></a>投影矩阵</h2><p><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/project.jpg" alt="project"></p>
 <p>由此可见，通过非局部均值的方法可以进行图像的去噪。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文是在阅读论文<a href="http://www.ipol.im/pub/art/2011/bcm_nlm/" target="_blank" rel="external">“Non-Local Means Denoising”</a>后编写的，其中的假设推倒参考了圣经《数字图像处理》,若有错误，欢迎讨论。</p>
 
