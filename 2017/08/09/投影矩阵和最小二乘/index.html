@@ -104,7 +104,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/space.jpg">
 <meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/project.jpg">
-<meta property="og:updated_time" content="2017-08-09T12:57:33.179Z">
+<meta property="og:updated_time" content="2017-08-15T02:15:18.581Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="投影矩阵与最小二乘">
 <meta name="twitter:description" content="矩阵空间分析矩阵和线性空间有着密不可分的关系。在矩阵$A\in R^{m \times n}$中存在着四种简单的空间，分别是列空间用$C(A)$表示，即矩阵的列向量组成的空间，进一步说是矩阵的不相关的列向量形成的空间。与列空间正交的空间是其对应的零空间即$N(A^{T})$，零空间是由$A^{T}X=0$的解向量形成的空间。列空间的维度等于矩阵的秩$r(A)$，而$N(A^{T})$零空间的维度是">
@@ -393,7 +393,7 @@
 <h2 id="投影矩阵"><a href="#投影矩阵" class="headerlink" title="投影矩阵"></a>投影矩阵</h2><p><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/project.jpg" alt="project"></p>
 <p>投影矩阵的作用是把一个向量向另一个空间做投影，这个概念在机器学习中的作用就是降维，另外在线性判别分析（LDA）中也用到了投影的概念。上图中$P$就是投影矩阵，$Pb$就是经过投影矩阵$P$作用后的投影，从图中不难发现该投影是正交投影，另外还有斜投影。它们之间有一定的区别，正交投影矩阵满足Hermitte特性。另外所有的投影矩阵满足$P^2=P$,因为投影的再投影是其本身即$P \cdot Pb=Pb$,并且向量$b$是任意的，所以存在等式$P^2=P$。综合起来，正交投影矩阵应该满足两条性质（1）$P^{H}=P$，（2）$P^2=P$。<br>其实从投影的结果来看实际上是把原来的向量投影到投影矩阵$P$的列空间里，因为向量$b$就是对矩阵列向量的线性组合。</p>
 <h2 id="投影矩阵和最小二乘之间的联系"><a href="#投影矩阵和最小二乘之间的联系" class="headerlink" title="投影矩阵和最小二乘之间的联系"></a>投影矩阵和最小二乘之间的联系</h2><p>我们在解决线性方程$Ax = b$的时候常常会遇到无解的情况，其实这时候的一种理解是在矩阵$A$的列向量空间中无法找到$x$将向量$b$表示出来，那么我们就可以想到一种求其近似解的思路，即将向量$b$通过投影矩阵P向矩阵$A$的列空间作投影，那么其投影就是可以用列空间中的向量表示出来的。由于投影的做法会有多种，但是为了保证欧式距离$|| b-Pb ||_2$的距离最小，因此作的投影应该是正交投影。我们假设经过上述近似后，原来的求解问题变成了$A\overline{x}=Pb$的近似解。<br>既然投影$Pb$是落在矩阵$A$的列空间中，那么通过正交性有$A^{T}(b-Pb)=0$，所以有<br>$A^{T}(b-A\overline{x})=0\\<br>A^{T}A\overline{x}=A^{T}b$<br>若$A$的列向量满足不相关或独立性，那么$\overline{x}=(A^{T}A)^{-1}A^{T}b$，并且有投影矩阵$P=A(A^{T}A)^{-1}A^{T}$。上述就是通过投影矩阵来求解线性方程的近似解。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上述内容对矩阵空间、投影矩阵以及投影矩阵和最小二乘之间的联系作了简单介绍。在MIT的矩阵课中有更详细的介绍。若有错误，欢迎讨论。禁止转载、抄袭。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上述内容对矩阵空间、投影矩阵以及投影矩阵和最小二乘之间的联系作了简单介绍。在MIT的矩阵课中有更详细的介绍。若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭。</p>
 
       
     </div>
