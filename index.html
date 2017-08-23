@@ -292,7 +292,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/23/PCA-and-quadratically-regularized-PCA/" itemprop="url">PCA and quadratically regularized PCA</a></h1>
+                <a class="post-title-link" href="/2017/08/23/PCA-and-quadratically-regularized-PCA/" itemprop="url">主成分分析和二次正则化PCA</a></h1>
         
 
         <div class="post-meta">
@@ -355,7 +355,7 @@
 
           
           
-             <span id="/2017/08/23/PCA-and-quadratically-regularized-PCA/" class="leancloud_visitors" data-flag-title="PCA and quadratically regularized PCA">
+             <span id="/2017/08/23/PCA-and-quadratically-regularized-PCA/" class="leancloud_visitors" data-flag-title="主成分分析和二次正则化PCA">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -389,7 +389,8 @@
         
           
             <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>主成分分析在信号处理中有着极其重要的作用，这里分析的主成分分析和机器学习中PCA降维略有差别，但是其实两者的实质是一样的。这篇博客会从矩阵理论的角度对主成分分析做一个细致的介绍。</p>
-<h2 id="PCA-模型"><a href="#PCA-模型" class="headerlink" title="PCA 模型"></a>PCA 模型</h2><p>PCA在矩阵问题中的最初模型是找到秩为k的矩阵$Z$来近似矩阵$A$。优化模型如下：<br>$$ \text{minimize} \quad ||A-Z||_2 \\<br>\text{subject to} \quad rank(Z) \leq k$$</p>
+<h2 id="PCA-模型"><a href="#PCA-模型" class="headerlink" title="PCA 模型"></a>PCA 模型</h2><p>PCA在矩阵问题中的最初模型是找到秩为k的矩阵$Z$来近似矩阵$A$。优化模型如下：<br>$$ \text{minimize} \quad ||A-Z||_F \\<br>\text{subject to} \quad rank(Z) \leq k$$<br>这里假设矩阵$Z$的大小是$Z\in R^{m \times n}$。由于$Z$的秩是小于等于k的，所以可以令$Z=XY$，其中$X\in R^{m \times k}$，$Y\in R^{k \times n}$(为了简便直接令$rank(Z)=k$)。那么模型转化为$$\text{minimize} \quad ||A-XY||_F = ||\Sigma-U^{T}XYV||_F$$，所以可以直接求解得到$XY=U\Sigma_k V^{T}$，然后让$X=U_k\Sigma_k^{1/2}$，$Y=\Sigma_k^{1/2} V_k^{T}$。很显然$X$,$Y$的解不是唯一的。例如它们的取值还可以是$X=U_k\Sigma_k^{1/2}G_k$，$Y=G_k^{-1}\Sigma_k^{1/2} V_k^{T}$。</p>
+<h2 id="二次正则化PCA"><a href="#二次正则化PCA" class="headerlink" title="二次正则化PCA"></a>二次正则化PCA</h2><p>为了对矩阵$X$和$Y$进行一定的约束，在目标函数中加上了二次正则项。这时求解过程会变得相对复杂些。我们首先看优化模型：<br>$$\text{minimize} ||A-XY||_F+r||X||_F+r||Y||_F$$<br>当然，$X\in R^{m \times k}$，$Y\in R^{k \times n}$。目标函数是一个二范数的凸函数，通过直接求导得出最小值。对$X$和$Y$的求导结果分别如下：<br>$$(XY-A)Y^{T} + rX=0, (XY-A)^{T}X + rY^{T} = 0$$其中的求导过程要用到矩阵迹的求导公式，$$||A||_F = \sqrt{tr(A^{T}A)}$$<br>$$\frac{\partial}{X}Tr(B^{T}X^{T}CXB)=C^{T}XBB^{T}+CXBB^{T}$$<br>$$\frac{\partial}{X}Tr(AXB)=A^{T}B^{T} \quad \frac{\partial}{X}Tr(AX^{T}B)=BA$$<br>化简求导结果，我们可以得到如下等式，其中左边的等式乘以了$X^{T}$，右边等式乘以了$Y$。<br>$$X^{T}(A-XY)Y^{T}=rX^{T}X \quad Y(A-XY)^{T}X=rYY^{T}$$，所以$XX^{T}=Y^{T}Y$。利用上述结论重写我们的优化条件就是：<br>$$\left[<br>\begin{array}{c}<br>-rI\quad A\\<br>A^{T} \quad -rI<br>\end{array}<br>\right]\left[<br>\begin{array}{c}<br>X\<br>Y^{T}<br>\end{array}<br>\right] = \left<a href="X^{T}X"><br>\begin{array}{c}<br>X\<br>Y^{T}<br>\end{array}<br>\right</a>$$</p>
 
           
         
