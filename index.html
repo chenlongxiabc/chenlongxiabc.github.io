@@ -273,6 +273,178 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/06/STL源码分析List/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="chenlongxi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/Fulan.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/06/STL源码分析List/" itemprop="url">STL源码分析List</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-06T10:00:51+08:00">
+                2017-11-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/06/STL源码分析List/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/06/STL源码分析List/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/11/06/STL源码分析List/" class="leancloud_visitors" data-flag-title="STL源码分析List">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>最近在看侯捷老师的STL剖析课程。边看课顺便记下笔记，算是对自己的监督吧。侯捷老师的课程选用的是cygnus C++ 2.91.57 for windows 版本，虽然年代久远但是看起来要容易很多，而我看的是SGI的STL版本，内容上应该差不多，主要是阅读起来方便。最近在看书，我很喜欢侯捷老师书中的一句话，“天下大事必作于细”，与君共勉。</p>
+<h2 id="List内容介绍"><a href="#List内容介绍" class="headerlink" title="List内容介绍"></a>List内容介绍</h2><p>List 在标准库中指的是双向链表，而我们在数据结构中自己定义的可能是单向链表，基本原理差不多。另外，要注意的是标准库的双向链表其实是环状链表，示意图如下：<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/list.png" alt="list"><br>注意图中有一个灰色的节点，该节点就是我们常用的list<t>.end()尾后迭代器所指向的地方。但是要注意该节点不属于我们定义的list内容，因此对它解引用会出现越界的错误。<br>‘’’+cpp<br>template <class t=""><br>struct <strong>list_node<br>{<br>    typedef void* void_pointer;<br>    void_pointer prev;<br>    void_pointer next;<br>    T data;<br>};<br>template <class t,="" class="" alloc="alloc"><br>class list{<br>protected:<br>    typedef </class></strong>list_node<t> list_node;<br>public:<br>    typedef list_node<em> link_type;<br>    typedef __list_iterator&lt;T, T&amp;, T</em>&gt; iterator;<br>protected:<br>    link_type node;<br>};<br>template<class t,="" class="" ref,="" ptr=""><br>struct <strong>list_iterator<br>{<br>    typedef T value_type;<br>    typedef Ptr pointer;<br>    typedef Ref reference;<br>    typedef </strong>list_node<t>* link_type;<br>    typedef ptrdiff_t difference_type;<br>    link_type node;</t></class></t></class></t></p>
+<pre><code>reference operator*() const {return (*node).data;}
+pointer operator-&gt;() const {return &amp;(operator*());}
+self &amp; operator++()
+{node = (link_type)((*node).next); return *this;}
+self operator++(int)
+{self tmp = *this; ++*this; return tmp;}
+</code></pre><p>}<br>‘’’</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/30/A-generative-vision-model-RCN/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1791,7 +1963,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1802,7 +1974,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1813,7 +1985,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
