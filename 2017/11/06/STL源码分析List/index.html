@@ -103,7 +103,7 @@
 <meta property="og:description" content="简介最近在看侯捷老师的STL剖析课程。边看课顺便记下笔记，算是对自己的监督吧。侯捷老师的课程选用的是cygnus C++ 2.91.57 for windows 版本，虽然年代久远但是看起来要容易很多，而我看的是SGI的STL版本，内容上应该差不多，主要是阅读起来方便。最近在看书，我很喜欢侯捷老师书中的一句话，“天下大事必作于细”，与君共勉。 List内容介绍List 在标准库中指的是双向链表，而">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/list.png">
-<meta property="og:updated_time" content="2017-11-06T07:40:36.152Z">
+<meta property="og:updated_time" content="2017-11-08T02:21:55.425Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="STL源码分析List">
 <meta name="twitter:description" content="简介最近在看侯捷老师的STL剖析课程。边看课顺便记下笔记，算是对自己的监督吧。侯捷老师的课程选用的是cygnus C++ 2.91.57 for windows 版本，虽然年代久远但是看起来要容易很多，而我看的是SGI的STL版本，内容上应该差不多，主要是阅读起来方便。最近在看书，我很喜欢侯捷老师书中的一句话，“天下大事必作于细”，与君共勉。 List内容介绍List 在标准库中指的是双向链表，而">
@@ -396,8 +396,8 @@
 <p>递增运算符重载肯定返回的是调用者本身的类型即iterator类型。所以是返回*this。而前置递增运算符返回的是+1之后的iterator，而这里的+1其实就是让原先的指针node变成下一个node。注意前置运算符返回的是引用，而后置运算符不是。后置运算符多加了一个函数参数int，加上该参数的目的是为了区分前置与后置运算符，理由是当我们在调用这两种运算符时，只有一个函数参数即iterator的对象，所以无法区分，因此加上了一个函数参数int。而我们在调用时却不用写成i++5，理由是编译器会给我们加上，然后就可以区分了。后置递增运算符需要先保存以前的对象，然后再利用前置运算符进行递增，饭后旧的iterator。</p>
 <p>解引用和(-&gt;)运算符返回的类型有一定差别，分别是引用和指针。这两者最终还是调用的built-in type的操作。举个例子：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">list</span>&lt;Foo&gt;::iterator ite;</div><div class="line">ite-&gt;method();</div><div class="line"><span class="comment">//相当于(*ite).method, *ite获得一个 Foo object;最后就是 object.method()</span></div><div class="line"><span class="comment">//相当于(&amp;(*ite))-&gt;method(); &amp;(*ite)得到一个对象指针，然后就相当于指针调用一个method;</span></div></pre></td></tr></table></figure>
-<p>另外需要注意的是在后置运算符重载的定义中 self tmp = <em>this 调用的是复制构造函数而不是</em>重载运算符。++*this 调用的是前置运算符重载，因为这是存在的运算符优先级关系。</p>
-<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭。</p>
+<p>另外需要注意的是在后置运算符重载的定义中 self tmp = *this 调用的是复制构造函数而不是*重载运算符。++*this 调用的是前置运算符重载，因为这是存在的运算符优先级关系。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
 
       
     </div>
@@ -468,6 +468,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/08/STL源码分析iterator和vector/" rel="prev" title="STL源码分析iterator">
+                STL源码分析iterator <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -551,7 +555,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
