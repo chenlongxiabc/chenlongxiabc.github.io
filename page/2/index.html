@@ -273,6 +273,177 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/14/牛顿法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="chenlongxi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/Fulan.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/14/牛顿法/" itemprop="url">牛顿法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-14T19:35:54+08:00">
+                2017-08-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Matrix-in-mathematics/" itemprop="url" rel="index">
+                    <span itemprop="name">Matrix in mathematics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/14/牛顿法/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/08/14/牛顿法/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/08/14/牛顿法/" class="leancloud_visitors" data-flag-title="牛顿法">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>在凸优化问题的求解方法中有很多具体可行的优化方法，例如梯度下降法、牛顿法、交替方向乘子法（ADMM）等。这篇文章会对求解一般无约束问题的牛顿法做个简单粗略的介绍，让我们明白它的基本原理，知道如何使用它。复杂的证明和讨论不在文中涉及，毕竟不是数学专业，学的不深。</p>
+<h2 id="牛顿法原理分析"><a href="#牛顿法原理分析" class="headerlink" title="牛顿法原理分析"></a>牛顿法原理分析</h2><p>首先我们从最简单的一维情况开始。它的基本思想是在现有的参考点附近对$f(x)$做二阶泰勒展开，然后找到一个极小点作为下一个估计值。假设$x_k$是当前的参考点，$x_{k+1}$是待求的下一个估计值,优化目标函数是$f(x)$。那么$f(x)$在$x_k$附近的二阶泰勒展开是$\varphi(x) = f(x_k) + f’(x_k)(x-x_k) + \frac{1}{2}f’’(x_k)(x-x_k)^2$,求$\varphi’(x)=0$的解即为下一个估计值$x_{k+1}$。<br>$$f’’(x-x_k)+f’(x_k)=0$$推出$x_{k+1} = x_k-\frac{f’(x_k)}{f’’(x_k)}$。</p>
+<p>将上述一维情况推广到矩阵形式。我们的表达式会变为$$\varphi(\mathbf{x})=f(\mathbf{x_k})+\nabla f(\mathbf{x_k})^{T}(\mathbf{x}-\mathbf{x_k})+\frac{1}{2}(\mathbf{x}-\mathbf{x_k})^{T}\nabla^2 f(\mathbf{x_k})(\mathbf{x}-\mathbf{x_k}),$$其中$\nabla^2 f(\mathbf{x_k})$为Hessian矩阵，是Hermitte的。在这里应注意一点，$f(\mathbf{x_k})$是关于向量$\mathbf{x_k}$的函数，但是函数值是实数。所以要注意改写为泰勒展开式的形式。令$\varphi(\mathbf{x})=0$，得到$$\nabla f(\mathbf{x_k})+\nabla^2 f(\mathbf{x_k})(\mathbf{x}-\mathbf{x_k})=0，$$这里要注意矩阵求导的计算，其中$\frac{1}{2}(\mathbf{x}-\mathbf{x_k})^{T}\nabla^2 f(\mathbf{x_k})(\mathbf{x}-\mathbf{x_k})$求导得到$$\frac{1}{2}[\nabla^2 f(\mathbf{x_k})(\mathbf{x}-\mathbf{x_k})+[\nabla^2 f(\mathbf{x_k})]^{H}(\mathbf{x}-\mathbf{x_k})]，$$根据$\nabla^2 f(\mathbf{x_k})$为Hessian矩阵化简得到上述求导结果。最后求解得$\mathbf{x_{k+1}}=\mathbf{x_k}- \mathbf{H_k}^{-1}\nabla f(\mathbf{x_k})$。可以发现矩阵形式和一维情况很类似。当然，上述推导过程很重要的一点是优化函数在参考点的二阶导数或者Hessian矩阵存在。</p>
+<h2 id="阻尼牛顿法简介"><a href="#阻尼牛顿法简介" class="headerlink" title="阻尼牛顿法简介"></a>阻尼牛顿法简介</h2><p>原始牛顿法由于迭代公式中没有步长因子，因此是定步长迭代。对于非二次型目标函数，有时会出现函数值上升，即$f(x_{k+1})&gt;f(x_k)$的情况。这说明原始牛顿法不能保证函数值稳定地下降。严重情况下会出现迭代点列${x_k}$发散而导致计算失败。阻尼牛顿法每次迭代方向仍采用$d_k=-\mathbf{H_k}^{-1}\nabla f(\mathbf{x_k})$，但是每次迭代需要沿着此方向作一维搜索以寻求最优的步长因子$\lambda_k$，用优化公式表示是$$\lambda_k=argmin_{\lambda\in R}f(x+\lambda d_k)。$$阻尼牛顿法实质是对步长进行了优化，当然除此之外，还有其他的优化方案。</p>
+<h2 id="牛顿法的进一步修正"><a href="#牛顿法的进一步修正" class="headerlink" title="牛顿法的进一步修正"></a>牛顿法的进一步修正</h2><p>上述牛顿法作出了一个很重要的假设前提就是二阶导数或者Hessian矩阵存在，其中还要强调一点的是要保证Hessian矩阵正定。若Hessian矩阵奇异，那么不能确定后继点，简单理解就是对应一维情况时二阶泰勒展开的二次项系数为0，此时函数的泰勒展开是条直线，无法确定后继点。若Hessian矩阵非奇异，也未必正定，牛顿方向可能不是下降方向，简单说是二阶泰勒展开的二次项系数可能为负数，这样在选取后继点时，算法可能会失效。</p>
+<p>为了解决Hessian矩阵非正定的情况，是修正$\nabla^2 f(\mathbf{x_k})$，构造出一个对称正定矩阵$\mathbf{G_k}$，从而得到$d_k=-\mathbf{G_k}^{-1}\nabla f(\mathbf{x_k})$，再沿此方向作一维搜索。构造矩阵$\mathbf{G_k}$的方法是令<br>$$\mathbf{G_k}=\nabla^2 f(\mathbf{x_k})+\epsilon_k \mathbf{I}$$。此时，若$\alpha_k$是$\nabla^2 f(\mathbf{x_k})$的特征值，那么$\mathbf{G_k}$的特征值是$\alpha_k + \epsilon_k$，原因可以结合对称矩阵是可相似对角化的去理解。因此，只要$\epsilon_k$足够大，就能保证$\mathbf{G_k}$的正定性。</p>
+<p>其中需要我们注意的是当$\mathbf{x_k}$为鞍点时，有<br>$$\nabla f(\mathbf{x_k}) = 0, \nabla^2 f(\mathbf{x_k}) \text{不定}$$因此原来的搜索方向不能使用，此时的$d_k$应选取负曲率方向，即$d_k^{T} \nabla^2 f(\mathbf{x_k}) d_k &lt; 0$。这里涉及到负曲率方向的定义，在张贤达的《矩阵分析与应用》中说到，当矩阵$\mathbf{H}$是非线性函数$f(x)$的Hessian矩阵时，称满足$\mathbf{p^{H}Hp} &gt; 0$ 的向量$\mathbf{p}$为函数$f$的正曲率方向，满足$\mathbf{p^{H}Hp} &lt; 0$ 的向量$\mathbf{p}$为函数$f$的负曲率方向。标量$\mathbf{p}^{H}\mathbf{Hp}$称为函数$f$沿着方向$\mathbf{p}$的曲率。沿着负曲率方向进行一维搜索必能使目标函数值下降。</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>牛顿法的迭代收敛速度很快，这里就要和传统的梯度下降法进行比较一下，梯度下降法只是利用了优化函数的一阶导数，相当于利用了速度的概念，而牛顿法利用了二阶导数，也就是梯度的梯度，相当于考虑了加速度的信息，所以收敛速度更快。更通俗的理解是如果我们的泰勒级数足够多，那么求其倒数为0，只需一步就可以直接求出最优解，当然这是极端情况，例如二次函数。但是，牛顿法涉及到求解Hessian矩阵，所以计算量、存储量很大，此篇博客参考了《最优化理论与算法》陈宝林老师的著作。若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/09/投影矩阵和最小二乘/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -819,7 +990,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -830,7 +1001,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -841,7 +1012,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
