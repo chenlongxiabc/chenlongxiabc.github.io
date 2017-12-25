@@ -273,6 +273,173 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/23/PCA-and-quadratically-regularized-PCA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="chenlongxi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/Fulan.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/23/PCA-and-quadratically-regularized-PCA/" itemprop="url">主成分分析和二次正则化PCA</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-23T16:26:11+08:00">
+                2017-08-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Matrix-in-mathematics/" itemprop="url" rel="index">
+                    <span itemprop="name">Matrix in mathematics</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/23/PCA-and-quadratically-regularized-PCA/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/08/23/PCA-and-quadratically-regularized-PCA/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/08/23/PCA-and-quadratically-regularized-PCA/" class="leancloud_visitors" data-flag-title="主成分分析和二次正则化PCA">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>主成分分析在信号处理中有着极其重要的作用，这里分析的主成分分析和机器学习中PCA降维略有差别，但是其实两者的实质是一样的。这篇博客会从矩阵理论的角度对主成分分析做一个细致的介绍。</p>
+<h2 id="PCA-模型"><a href="#PCA-模型" class="headerlink" title="PCA 模型"></a>PCA 模型</h2><p>PCA在矩阵问题中的最初模型是找到秩为k的矩阵$Z$来近似矩阵$A$。优化模型如下：<br>$$ \text{minimize} \quad ||A-Z||_F^2 \\<br>\text{subject to} \quad rank(Z) \leq k$$<br>这里假设矩阵$Z$的大小是$Z\in R^{m \times n}$。由于$Z$的秩是小于等于k的，所以可以令$Z=XY$，其中$X\in R^{m \times k}$，$Y\in R^{k \times n}$(为了简便直接令$rank(Z)=k$)。那么模型转化为$$\text{minimize} \quad ||A-XY||_F^2 = ||\Sigma-U^{T}XYV||_F^2$$，所以可以直接求解得到$XY=U\Sigma_k V^{T}$，然后让$X=U_k\Sigma_k^{1/2}$，$Y=\Sigma_k^{1/2} V_k^{T}$。很显然$X$,$Y$的解不是唯一的。例如它们的取值还可以是$X=U_k\Sigma_k^{1/2}G_k$，$Y=G_k^{-1}\Sigma_k^{1/2} V_k^{T}$。</p>
+<h2 id="二次正则化PCA"><a href="#二次正则化PCA" class="headerlink" title="二次正则化PCA"></a>二次正则化PCA</h2><p>为了对矩阵$X$和$Y$进行一定的约束，在目标函数中加上了二次正则项。这时求解过程会变得相对复杂些。我们首先看优化模型：<br>$$\text{minimize} ||A-XY||_F^2+r||X||_F^2+r||Y||_F^2$$<br>当然，$X\in R^{m \times k}$，$Y\in R^{k \times n}$。目标函数是一个二范数的凸函数，通过直接求导得出最小值。对$X$和$Y$的求导结果分别如下：<br>$$(XY-A)Y^{T} + rX=0, (XY-A)^{T}X + rY^{T} = 0$$其中的求导过程要用到矩阵迹的求导公式，$$||A||_F^2 = \sqrt{tr(A^{T}A)}$$<br>$$\frac{\partial}{X}Tr(B^{T}X^{T}CXB)=C^{T}XBB^{T}+CXBB^{T}$$<br>$$\frac{\partial}{X}Tr(AXB)=A^{T}B^{T} \quad \frac{\partial}{X}Tr(AX^{T}B)=BA$$<br>化简求导结果，我们可以得到如下等式，其中左边的等式乘以了$X^{T}$，右边等式乘以了$Y$。<br>$$X^{T}(A-XY)Y^{T}=rX^{T}X \quad Y(A-XY)^{T}X=rYY^{T}$$，所以$XX^{T}=Y^{T}Y$。利用上述结论重写我们的优化条件就是：<br>$$\left[<br>\begin{array}{cc}<br>-rI \quad A\\<br>A^{T} \quad -rI<br>\end{array}<br>\right] \left[<br>\begin{array}{c}<br>X\\<br>Y^{T}<br>\end{array}<br>\right] =<br>\left[<br>\begin{array}{c}<br>X\\<br>Y^{T}<br>\end{array}<br>\right] (X^{T}X)<br>$$<br>矩阵$X^{T}X$和矩阵$\left[<br>\begin{array}{cc}<br>-rI \quad A\\<br>A^{T} \quad -rI<br>\end{array}<br>\right]$有相同的特征值（注意是包含于的关系），并且特征向量张成的空间等于$\left[<br>\begin{array}{c}<br>X\\<br>Y^{T}<br>\end{array}<br>\right]$的子空间。假设$A=U\Sigma V$，那么矩阵$\left[<br>\begin{array}{cc}<br>-rI \quad A\\<br>A^{T} \quad -rI<br>\end{array}<br>\right]$ 的特征值为$-r\pm \sigma_i$，因为矩阵$X^{T}X$的特征值非负，所以其特征值为$-r+ \sigma_i(\sigma_i \geq r)$，对应的特征向量为<br>$\left[<br>\begin{array}{c}<br>u_i\\<br>v_i<br>\end{array}<br>\right]$。由于特征向量张成的空间等于$\left[<br>\begin{array}{c}<br>X\\<br>Y^{T}<br>\end{array}<br>\right]$的子空间。所以可以令$X=U_k(\Sigma_k - rI)^{\frac{1}{2}}$， $Y=(\Sigma_k - rI)^{\frac{1}{2}}V_k$，注意此时的$k$并不是前$k$个奇异值的含义，而是表示在正奇异值的集合中取出$k$个值。当然最后的结论肯定是前$k$个奇异值，只需要把我们的$X$和$Y$重新代入到目标函数中，就可以发现该结论。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇博客从矩阵分析的角度对PCA和二次正则化PCA作了简单的介绍，里面涉及到的矩阵理论知识较多，但也总算写完了，并给出了不太好的理解。博客参考了论文《Generalized Low Rank Models》。若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/14/牛顿法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -990,7 +1157,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
