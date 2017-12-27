@@ -273,6 +273,175 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/27/STL-源码分析hashtable/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="chenlongxi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/Fulan.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/27/STL-源码分析hashtable/" itemprop="url">STL 源码分析hashtable</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-27T15:46:57+08:00">
+                2017-12-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/27/STL-源码分析hashtable/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/27/STL-源码分析hashtable/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/12/27/STL-源码分析hashtable/" class="leancloud_visitors" data-flag-title="STL 源码分析hashtable">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>哈希表在模板中有着重要的应用。它是unordered_set、unordered_map的底层容器。哈希表的实现原理比较简单，在此不进行详细描述。在C++11以前，unordered_set、unordered_map的名称是hash_set和hash_map，后来才进行改名，但是换汤不换药，都是通过哈希表实现的。哈希表的重要特点是查找方便，时间复杂度是O(1)，但是它是无序排列的，通过hash function计算得到hash值，然后放入指定的篮子(bucket)。</p>
+<h2 id="hash-table模板"><a href="#hash-table模板" class="headerlink" title="hash_table模板"></a>hash_table模板</h2><p><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/hash_table.png" alt="hash_table"></p>
+<p>上图是hash_table的简单示意图，在buckets vector中存储了指向节点的指针，通过指针可以找到该篮子中的所有节点。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// hash_table code</span></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Value</span>, <span class="title">class</span> <span class="title">Key</span>, <span class="title">class</span> <span class="title">HashFcn</span>, <span class="title">class</span> <span class="title">ExtractKey</span>, <span class="title">class</span> <span class="title">EqualKey</span>, <span class="title">class</span> <span class="title">Alloc</span> = <span class="title">alloc</span>&gt;</span></div><div class="line"><span class="title">class</span> <span class="title">hash_table</span> &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">typedef</span> HashFcn hasher;</div><div class="line">    <span class="keyword">typedef</span> EqualKey key_equal;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">size_t</span> size_type;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    hasher hash;</div><div class="line">    key_equal equals;</div><div class="line">    ExtractKey get_key;</div><div class="line">    <span class="keyword">typedef</span> __hashtable_node&lt;Value&gt; node;</div><div class="line">    <span class="built_in">vector</span>&lt;node*, Alloc&gt; buckets;</div><div class="line">    size_type num_elements;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function">size_type <span class="title">bucket_count</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> buckets.size(); &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Value</span>&gt; </span></div><div class="line"><span class="title">struct</span> __<span class="title">hashtable_node</span> &#123;</div><div class="line">    __hashtable_node *next;</div><div class="line">    Value val;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// hash_table iterators</span></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Value</span>, <span class="title">class</span> <span class="title">Key</span>, <span class="title">class</span> <span class="title">HashFcn</span>, <span class="title">class</span> <span class="title">ExtractKey</span>, <span class="title">class</span> <span class="title">EqualKey</span>, <span class="title">class</span> <span class="title">Alloc</span>&gt;</span></div><div class="line"><span class="title">struct</span> __<span class="title">hashtable_iterator</span> &#123;</div><div class="line">    node *cur;</div><div class="line">    hashtable *ht;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>首先看看hash_table的大小，其中有三个函数对象hash、equals和get_key，一共占用三个字节，buckets是一个vector含有三个指针占用12字节，num_elements占用4个字节。求和是19个字节，内存对齐后是20字节。然后注意下hash_table的iterator，它含有两个指针，分别是指向hash_table即bucket vector的ht和指向节点的指针cur。两个指针实现了对hash_table的遍历。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/25/STL-源码分析set、map/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1767,175 +1936,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/02/低秩和稀疏分离的模型推导/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="chenlongxi">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/Fulan.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chen">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/02/低秩和稀疏分离的模型推导/" itemprop="url">低秩和稀疏分离的模型推导</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-02T09:16:47+08:00">
-                2017-09-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Matrix-in-mathematics/" itemprop="url" rel="index">
-                    <span itemprop="name">Matrix in mathematics</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/09/02/低秩和稀疏分离的模型推导/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/09/02/低秩和稀疏分离的模型推导/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2017/09/02/低秩和稀疏分离的模型推导/" class="leancloud_visitors" data-flag-title="低秩和稀疏分离的模型推导">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="综述"><a href="#综述" class="headerlink" title="综述"></a>综述</h2><p>低秩和稀疏分离的模型又有一个说法叫鲁棒的主成分分析(Robust Principal Component Analysis)，简称RPCA。<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/RPCA.jpg" alt="RPCA"><br>在上图中低秩矩阵就是对应矩阵中的主成分，而sparse error matrix就是稀疏成分。RPCA在信号处理中有着很多实际的应用。<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/rpca_application.jpg" alt="rpca_application"><br>上图中两个典型的应用分别是视频中的背景建模和人脸图像去阴影。在监控视频中，背景往往是固定不动的，是对应视频中的主成分，而运动部分在每一帧图像中所处的位置不同，并且所占比例很小，可以看作是稀疏成分。人脸图像去阴影，是对多张同一人脸进行去阴影，而每一张人脸图像中的阴影比例较小，并且分布的位置不同，所以阴影部分就是稀疏成分，而无阴影图像对应主成分。因此，这两个应用都可以通过RPCA来进行建模处理。注意上述的稀疏成分更多是经验性的描述，并没有给出明确的数学定义，具体的定义在文献中也没有给出，具体问题应该具体分析吧。</p>
-<h2 id="RPCA数学建模及求解"><a href="#RPCA数学建模及求解" class="headerlink" title="RPCA数学建模及求解"></a>RPCA数学建模及求解</h2><p>这篇博客中介绍的是典型的RPCA数学建模方法，也是在这篇论文中“Robust Principal Analysis ?”提出的RPCA凸优化模型。这里应该注意RPCA分析的具体操作流程是首先把每一帧图像或者每一张图片进行了列向量化，然后把列向量按列排在一起，这样便构成了RPCA中的矩阵。对应的数学模型是：<br>$$M=L_0 + S_0$$<br>其中$M$对应的是列向量化的矩阵，$L_0$则对应的是矩阵中的低秩成分，$S_0$是稀疏成分。上述问题可以建模为：<br>$$ \text{min} \quad rank(L) + ||S||_0 \quad \text{s. t.} \quad M = L + S $$<br>模型的直观解释是主成分是低秩的，稀疏成分的非零元更少，所以对两者之和进行最小化求解就可以得到低秩和稀疏成分。但是，上述模型是非凸的，为了转化为凸优化模型求解的问题，需要进行凸松弛（凸放缩），把$rank(L)$转化为核范数$||L||_\ast$即奇异值之和，零范数转化为1范数。那么凸放缩后的数学模型是：<br>$$\text{min} \quad ||L||_\ast + || S ||_1 \quad \text{s. t.} \quad M = L + S $$<br>求解该模型的常用方法是Alternating Direction Method of Multipliers(ADMM)算法。首先写出模型的增广拉格朗日式子：<br>$$l(L,S,Y) = ||L||_\ast + \lambda ||S||_1 + \langle Y,M-L-S \rangle +\frac{\mu}{2}||M-L-S||_F^2$$，<br>ADMM 算法的更新公式为：<br>$$L_{k+1} = \text{arg min}_L ||L||_\ast + \frac{\mu}{2} ||M-L-S_k+\frac{Y}{\mu}||_F^2 \\<br>S_{k+1} = \text{arg min}_S \lambda ||S||_1 + \frac{\mu}{2}  ||M-L_k-S+\frac{Y}{\mu}||_F^2 \\<br>Y_{k+1} = Y_k + \mu (M-L_k-S_k)<br>$$<br>关于ADMM算法会在下一篇博客中进行介绍。<br>其中$L$的更新式子可以简化为求解如下问题<br>$$\text{arg min}_X \frac{1}{2}||X-Y||_F^2 + \tau ||X||_\ast$$<br>由于该问题是凸问题因此最小值的解唯一，我们假设其解为$\hat{X} = \mathcal{D}_{\tau}(Y)$，其中$\mathcal{D}_{\tau}(Y)=U\mathcal{S}_{\tau}(\Sigma)V^T$，截断操作$\mathcal{S}_{\tau}[x] = \text{sgn}(x)\text{max}(|x|-\tau,0)$。下面我们需要证明$\hat{X}$为该凸问题的解。这里只需要证明下式成立：<br>$$Y- \hat{X} \in \tau \partial ||\hat{X}||_\ast$$<br>假设矩阵$Y$可以分解成$Y=U_0\Sigma_0 V_0^T + U_1\Sigma_1 V_1^T$，其中$\Sigma_0$奇异值大于$\tau$，$\Sigma_1$奇异值小于$\tau$。因此我们可以得到<br>$\hat{X} = U_0 (\Sigma_0 -\tau I)V_0^T$，$Y-\hat{X} = \tau (U_0 V_0^T + W), W=\frac{1}{\tau} U_1 \Sigma_1 V_1^T$核范数导数的定义是一个集合，即</p>
-<p>$$\partial ||E||_\ast  = \lbrace A B^T + D : A^TD=\mathbf{0}, DB= \mathbf{0}, ||D||_2 \leq 1 \rbrace$$</p>
-<p>令$A=U_0, B=V_0, D=W$，由Y的SVD分解定义可知：$U_0^T U_1=\mathbf{0}$，因此，$A^TD=\mathbf{0}, DB= \mathbf{0}$。又因为$\Sigma_1$奇异值小于$\tau$，所以$||D||_2 \leq 1$。结论$Y-\hat{X} \in \tau \partial ||\hat{X}||_\ast$得证。<br>更新$S$的式子只需要进行求导就可以得到解，在此不再赘述，需要注意的是$||X||_1$是各元素的绝对值之和，因此求导时需要注意。<br>最后的更新算法即:</p>
-<p><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/RPCA_algorithm.jpg" alt="RPCA_algorithm"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇文章对RPCA问题作了简单的介绍和推导，文中的算法是比较经典的用凸优化的方法来求解RPCA问题，当然还有很多其他经典的方法，因为数学太差不想多说。若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1986,7 +1986,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
