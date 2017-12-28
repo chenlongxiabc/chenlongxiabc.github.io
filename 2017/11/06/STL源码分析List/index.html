@@ -102,12 +102,12 @@
 <meta property="og:site_name" content="Chen">
 <meta property="og:description" content="简介最近在看侯捷老师的STL剖析课程。边看课顺便记下笔记，算是对自己的监督吧。侯捷老师的课程选用的是cygnus C++ 2.91.57 for windows 版本，虽然年代久远但是看起来要容易很多，而我看的是SGI的STL版本，内容上应该差不多，主要是阅读起来方便。最近在看书，我很喜欢侯捷老师书中的一句话，“天下大事必作于细”，与君共勉。 List内容介绍List 在标准库中指的是双向链表，而">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/list.png">
-<meta property="og:updated_time" content="2017-12-28T11:32:34.714Z">
+<meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/list2.jpg">
+<meta property="og:updated_time" content="2017-12-28T13:08:45.149Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="STL源码分析List">
 <meta name="twitter:description" content="简介最近在看侯捷老师的STL剖析课程。边看课顺便记下笔记，算是对自己的监督吧。侯捷老师的课程选用的是cygnus C++ 2.91.57 for windows 版本，虽然年代久远但是看起来要容易很多，而我看的是SGI的STL版本，内容上应该差不多，主要是阅读起来方便。最近在看书，我很喜欢侯捷老师书中的一句话，“天下大事必作于细”，与君共勉。 List内容介绍List 在标准库中指的是双向链表，而">
-<meta name="twitter:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/list.png">
+<meta name="twitter:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/list2.jpg">
 
 
 
@@ -387,7 +387,7 @@
 
       
         <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>最近在看侯捷老师的STL剖析课程。边看课顺便记下笔记，算是对自己的监督吧。侯捷老师的课程选用的是cygnus C++ 2.91.57 for windows 版本，虽然年代久远但是看起来要容易很多，而我看的是SGI的STL版本，内容上应该差不多，主要是阅读起来方便。最近在看书，我很喜欢侯捷老师书中的一句话，“天下大事必作于细”，与君共勉。</p>
-<h2 id="List内容介绍"><a href="#List内容介绍" class="headerlink" title="List内容介绍"></a>List内容介绍</h2><p>List 在标准库中指的是双向链表，而我们在数据结构中自己定义的可能是单向链表，基本原理差不多。另外，要注意的是标准库的双向链表其实是环状链表，示意图如下：<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/list.png" alt="list"><br>注意图中有一个灰色的节点，该节点就是我们常用的list<t>.end()尾后迭代器所指向的地方。但是要注意该节点不属于我们定义的list内容，因此对它解引用会出现越界的错误。</t></p>
+<h2 id="List内容介绍"><a href="#List内容介绍" class="headerlink" title="List内容介绍"></a>List内容介绍</h2><p>List 在标准库中指的是双向链表，而我们在数据结构中自己定义的可能是单向链表，基本原理差不多。另外，要注意的是标准库的双向链表其实是环状链表，示意图如下：<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/list2.jpg" alt="list2"><br>注意图中有一个灰色的节点，该节点就是我们常用的list<t>.end()尾后迭代器所指向的地方。但是要注意该节点不属于我们定义的list内容，因此对它解引用会出现越界的错误。</t></p>
 <h2 id="List代码简析"><a href="#List代码简析" class="headerlink" title="List代码简析"></a>List代码简析</h2><p>下面的代码是对list_node的定义，从类模板的定义中可以知道，一个节点包括两个空指针和一个T类型的data。空指针其实可以换为list_node类型指针，后面的标准库中进行了更换。空指针是无类型指针，任何指针都可以直接赋值给它。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></div><div class="line"><span class="title">struct</span> __<span class="title">list_node</span> </div><div class="line">&#123;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">void</span>* void_pointer;</div><div class="line">    void_pointer prev;</div><div class="line">    void_pointer next;</div><div class="line">    T data;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 <p>接下来看下运算符重载，这主要是针对list中iterator的运算符。iterator其实也是一个类模板。下面看看主要代码，代码中的类型定义不要太过于纠结，主要看其实现原理。</p>
