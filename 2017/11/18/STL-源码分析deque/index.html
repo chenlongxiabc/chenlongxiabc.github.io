@@ -102,12 +102,12 @@
 <meta property="og:site_name" content="Chen">
 <meta property="og:description" content="简介deque是双端队列，支持快速随机访问。在前后位置插入/删除元素较快，它是vector和array的组合体，等下从结构中就可以看到，其实还应该加上list。string在侯捷老师后面的视频没有具体说明，但是在primer中说它和vector相似，因此结构不会很难。 deque结构 deque的结构设计很巧妙。deque中是以buffer为存储单位，当存储空间不够时，它会增加一个buffer的空">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/deque.png">
-<meta property="og:updated_time" content="2017-12-28T11:30:15.256Z">
+<meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/deque2.png">
+<meta property="og:updated_time" content="2017-12-28T12:52:27.557Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="STL 源码分析deque">
 <meta name="twitter:description" content="简介deque是双端队列，支持快速随机访问。在前后位置插入/删除元素较快，它是vector和array的组合体，等下从结构中就可以看到，其实还应该加上list。string在侯捷老师后面的视频没有具体说明，但是在primer中说它和vector相似，因此结构不会很难。 deque结构 deque的结构设计很巧妙。deque中是以buffer为存储单位，当存储空间不够时，它会增加一个buffer的空">
-<meta name="twitter:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/deque.png">
+<meta name="twitter:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/deque2.png">
 
 
 
@@ -387,7 +387,7 @@
 
       
         <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>deque是双端队列，支持快速随机访问。在前后位置插入/删除元素较快，它是vector和array的组合体，等下从结构中就可以看到，其实还应该加上list。string在侯捷老师后面的视频没有具体说明，但是在primer中说它和vector相似，因此结构不会很难。</p>
-<h2 id="deque结构"><a href="#deque结构" class="headerlink" title="deque结构"></a>deque结构</h2><p><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/deque.png" alt="deque"></p>
+<h2 id="deque结构"><a href="#deque结构" class="headerlink" title="deque结构"></a>deque结构</h2><p><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/deque2.png" alt="deque"></p>
 <p>deque的结构设计很巧妙。deque中是以buffer为存储单位，当存储空间不够时，它会增加一个buffer的空间，buffer的大小在旧版中可以指定，后面则默认设置了。上图中的buffer就是可以存储8个int的空间。中间的map其实是一个vector，注意这个vector是用来模拟deque的，意思就是vector的元素不是从头往后放置的，而是从中间到两边放置存储，因此当vector需要扩充时，元素是被copy到中间位置。vector中放置的是指针，该指针指向相应的buffer，这里就有点像list了。</p>
 <p>iterator包含了四个指针，其代码如下：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Ref</span>, <span class="title">class</span> <span class="title">Ptr</span>, <span class="title">size_t</span> <span class="title">BufSiz</span>&gt;</span></div><div class="line"><span class="title">struct</span> __<span class="title">deque_iterator</span> &#123;</div><div class="line">    <span class="keyword">typedef</span> random_access_iterator_tag iterator_category;</div><div class="line">    <span class="keyword">typedef</span> T value_type;</div><div class="line">    <span class="keyword">typedef</span> Ptr pointer;</div><div class="line">    <span class="keyword">typedef</span> Ref reference;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">size_t</span> size_type;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">ptrdiff_t</span> difference_type;</div><div class="line">    <span class="keyword">typedef</span> T** map_pointer;</div><div class="line">    <span class="keyword">typedef</span> __deque_iterator self;</div><div class="line"></div><div class="line">    T* cur;</div><div class="line">    T* first;</div><div class="line">    T* last;</div><div class="line">    map_pointer node;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
