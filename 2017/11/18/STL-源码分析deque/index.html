@@ -103,7 +103,7 @@
 <meta property="og:description" content="简介deque是双端队列，支持快速随机访问。在前后位置插入/删除元素较快，它是vector和array的组合体，等下从结构中就可以看到，其实还应该加上list。string在侯捷老师后面的视频没有具体说明，但是在primer中说它和vector相似，因此结构不会很难。 deque结构 deque的结构设计很巧妙。deque中是以buffer为存储单位，当存储空间不够时，它会增加一个buffer的空">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/deque.png">
-<meta property="og:updated_time" content="2017-11-18T12:03:18.338Z">
+<meta property="og:updated_time" content="2017-12-28T11:30:15.256Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="STL 源码分析deque">
 <meta name="twitter:description" content="简介deque是双端队列，支持快速随机访问。在前后位置插入/删除元素较快，它是vector和array的组合体，等下从结构中就可以看到，其实还应该加上list。string在侯捷老师后面的视频没有具体说明，但是在primer中说它和vector相似，因此结构不会很难。 deque结构 deque的结构设计很巧妙。deque中是以buffer为存储单位，当存储空间不够时，它会增加一个buffer的空">
@@ -398,7 +398,7 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//指向指针的指针</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">set_node</span><span class="params">(map_pointer new_node)</span> </span>&#123;</div><div class="line">    node = new_node;</div><div class="line">    first = *new_node;</div><div class="line">    last = first + difference_type(buffer_size());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>new_node解引用得到一个指针即map中所存的值，该值又指向buffer。last指针只需要在first上移动buffer_size()即可。</p>
 <p>最后说一下stack 和 queue的底层容器都可选择list 或 dequeue，但是两者都不允许遍历，也不提供iterator。</p>
-<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
 
       
     </div>
@@ -556,7 +556,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

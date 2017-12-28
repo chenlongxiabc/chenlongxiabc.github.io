@@ -105,7 +105,7 @@
 <meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/RPCA.jpg">
 <meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/rpca_application.jpg">
 <meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/RPCA_algorithm.jpg">
-<meta property="og:updated_time" content="2017-11-08T02:24:43.927Z">
+<meta property="og:updated_time" content="2017-12-28T11:31:29.963Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="低秩和稀疏分离的模型推导">
 <meta name="twitter:description" content="综述低秩和稀疏分离的模型又有一个说法叫鲁棒的主成分分析(Robust Principal Component Analysis)，简称RPCA。在上图中低秩矩阵就是对应矩阵中的主成分，而sparse error matrix就是稀疏成分。RPCA在信号处理中有着很多实际的应用。上图中两个典型的应用分别是视频中的背景建模和人脸图像去阴影。在监控视频中，背景往往是固定不动的，是对应视频中的主成分，而运">
@@ -393,7 +393,7 @@
 <p>$$\partial ||E||_\ast  = \lbrace A B^T + D : A^TD=\mathbf{0}, DB= \mathbf{0}, ||D||_2 \leq 1 \rbrace$$</p>
 <p>令$A=U_0, B=V_0, D=W$，由Y的SVD分解定义可知：$U_0^T U_1=\mathbf{0}$，因此，$A^TD=\mathbf{0}, DB= \mathbf{0}$。又因为$\Sigma_1$奇异值小于$\tau$，所以$||D||_2 \leq 1$。结论$Y-\hat{X} \in \tau \partial ||\hat{X}||_\ast$得证。<br>更新$S$的式子只需要进行求导就可以得到解，在此不再赘述，需要注意的是$||X||_1$是各元素的绝对值之和，因此求导时需要注意。<br>最后的更新算法即:</p>
 <p><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/RPCA_algorithm.jpg" alt="RPCA_algorithm"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇文章对RPCA问题作了简单的介绍和推导，文中的算法是比较经典的用凸优化的方法来求解RPCA问题，当然还有很多其他经典的方法，因为数学太差不想多说。若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇文章对RPCA问题作了简单的介绍和推导，文中的算法是比较经典的用凸优化的方法来求解RPCA问题，当然还有很多其他经典的方法，因为数学太差不想多说。若有错误，欢迎讨论。该博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
 
       
     </div>
@@ -549,7 +549,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

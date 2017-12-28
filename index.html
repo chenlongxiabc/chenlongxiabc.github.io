@@ -273,6 +273,178 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/28/STL源码分析functor和adapter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="chenlongxi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/Fulan.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/28/STL源码分析functor和adapter/" itemprop="url">STL源码分析functor和adapter</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T17:32:32+08:00">
+                2017-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/12/28/STL源码分析functor和adapter/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/12/28/STL源码分析functor和adapter/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/12/28/STL源码分析functor和adapter/" class="leancloud_visitors" data-flag-title="STL源码分析functor和adapter">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>STL的六大部件分别是容器、迭代器、算法、仿函数、适配器和分配器。分配器主要是用来分配内存空间的，其底层实现就是malloc。容器、迭代器和算法在前面的文章已经写过。这篇文章主要是简要分析functor和adapter。</p>
+<p><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/STL.png" alt="STL"></p>
+<h2 id="functors"><a href="#functors" class="headerlink" title="functors"></a>functors</h2><p>前面已经说过仿函数在算法中有着重要的应用。下面是在算法sort中调用不同仿函数的实例。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// using default comparison</span></div><div class="line">sort(vec.begin(), vec.end());</div><div class="line"><span class="comment">// using function as comp</span></div><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">myfunc</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> i &lt; j;</div><div class="line">&#125;</div><div class="line">sort(vec.begin(), vec.end(), myfunc);</div><div class="line"><span class="comment">// using object as comp</span></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">myclass</span></span></div><div class="line">&#123;</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> i &lt; j;</div><div class="line">    &#125;</div><div class="line">&#125; myobj;</div><div class="line">sort(vec.begin(), vec.end(), myobj);</div><div class="line"><span class="comment">// using explicitly default comparison</span></div><div class="line">sort(vec.begin(), vec.end(), less&lt;<span class="keyword">int</span>&gt;);</div><div class="line"><span class="comment">// using another comparision criteria</span></div><div class="line">sort(vec.begin(), vec.end(), greater&lt;<span class="keyword">int</span>&gt;);</div></pre></td></tr></table></figure>
+<p>另外要注意的是在标准库中定义的仿函数都继承了unary_function（一元操作符函数）或者binary_function（二元操作符函数）,这两个都只是对类型进行了定义。</p>
+<h2 id="adapters"><a href="#adapters" class="headerlink" title="adapters"></a>adapters</h2><p>stack、queue是两个典型的容器适配器。两者都是在底层上使用了别的容器，并把自己的函数封装在底层容器的函数上，相当于是为别的容器套了一个壳而已。下面是stack的源代码，应该说能比较明显地看出来其原理。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// stack</span></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Sequence</span> = <span class="title">deque</span>&lt;T&gt;&gt;</span></div><div class="line"><span class="title">class</span> <span class="title">stack</span></div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> Sequence::reference reference;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> Sequence::const_reference const_reference;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> Sequence::size_type size_type;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> Sequence::value_type value_type;</div><div class="line"><span class="keyword">protected</span>:</div><div class="line">    Sequence c; <span class="comment">// 底层容器</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">empty</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;<span class="keyword">return</span> c.empty(); &#125;</div><div class="line">    <span class="function">size_type <span class="title">size</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;<span class="keyword">return</span> c.size(); &#125;</div><div class="line">    <span class="function">reference <span class="title">top</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> c.back(); &#125;</div><div class="line">    <span class="function">const_reference <span class="title">top</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;<span class="keyword">return</span> c.back(); &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">const</span> value_type &amp;x)</span> </span>&#123;c.push_back(x); &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pop</span><span class="params">()</span> </span>&#123; c.pop_back(); &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到此为止，STL的主要内容应该说已经学的差不多了。侯捷老师的课程讲的确实详细，后面打算实现个简单的STL版本，以加深学习的印象。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/27/STL源码分析算法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -395,7 +567,7 @@
 <h2 id="iterator-category对算法的影响"><a href="#iterator-category对算法的影响" class="headerlink" title="iterator_category对算法的影响"></a>iterator_category对算法的影响</h2><p>下面这段代码是用来求两个迭代器之间的距离。我们知道对于连续存储的迭代器只需要尾首相减就可以得到两者的距离，但是对于非连续存储的，就需要移动迭代器直到首尾相等，从而得到距离，显然前者要比后者快很多。前面已经说过，对于Input_iterator_tag是可以接受后面的四种迭代器作为参数的，因此除了random_access_iterator使用第二种方式计算距离，其余都是通过第一种方法计算距离。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 第一种</span></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">InputIterator</span>&gt;</span></div><div class="line"><span class="title">inline</span> <span class="title">iterator_traits</span>&lt;InputIterator&gt;::difference_type</div><div class="line">__distance(InputIterator first, InputIterator last, input_iterator_tag)</div><div class="line">&#123;</div><div class="line">    iterator_traits&lt;InputIterator&gt;::difference_type n = <span class="number">0</span>;</div><div class="line">    <span class="keyword">while</span> (first != last)</div><div class="line">    &#123;</div><div class="line">        ++first; ++n;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> n;</div><div class="line">&#125;</div><div class="line"><span class="comment">// 第二种</span></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">RandomAccessIterator</span>&gt;</span></div><div class="line"><span class="title">inline</span> <span class="title">iterator_traits</span>&lt;RandomAccessIterator&gt;::difference_type</div><div class="line">__distance(RandomAccessIterator first, RandomAccessIterator last, random_access_iterator_tag)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> last - first;</div><div class="line">&#125;</div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">InputIterator</span>&gt;</span></div><div class="line"><span class="title">inline</span> <span class="title">iterator_traits</span>&lt;InputIterator&gt;::<span class="function">difference_type</span></div><div class="line"><span class="title">distance</span><span class="params">(InputIterator first, InputIterator last)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> iterator_traits&lt;InputIterator&gt;::iterator_category category;</div><div class="line">    <span class="keyword">return</span> __distance(first, last, category());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="iterator-category和type-traits对算法的影响"><a href="#iterator-category和type-traits对算法的影响" class="headerlink" title="iterator_category和type traits对算法的影响"></a>iterator_category和type traits对算法的影响</h2><p>侯捷老师对于这个知识点举了很多例子，下面就说说其中的一个例子，针对迭代器的拷贝函数。下面的PPT是老师课件中的实例。<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/iterator_trait.png" alt="trait"><br>对于拷贝可以使用图中的memmove()函数和通过for循环来完成元素的逐个拷贝，显然前者速度更快，因为后者可能需要调用拷贝复制函数。图中两个特化就是函数的重载，char和w_char_t的区别是前者占用一个字节，后者两个字节，类型不同。前面说iterator时说过它要对普通的指针也要能进行处理，这里刚好就用上了。后面条件判断has trivial op=()和has non-trivial op=()是对拷贝复制重要性的判断。例如侯老师上课中举的例子，对于一个我们自己创建的复数类，它的拷贝复制函数就很简单，而对于我们自己定义的其他类型，拷贝复制函数比较重要，这时就要选用不同的拷贝方式了。至于trivial和non-trivial的判断就要根据Type Traits来选择。</p>
-<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
 
           
         
@@ -564,7 +736,7 @@
 <p>上图是hash_table的简单示意图，在buckets vector中存储了指向节点的指针，通过指针可以找到该篮子中的所有节点。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// hash_table code</span></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Value</span>, <span class="title">class</span> <span class="title">Key</span>, <span class="title">class</span> <span class="title">HashFcn</span>, <span class="title">class</span> <span class="title">ExtractKey</span>, <span class="title">class</span> <span class="title">EqualKey</span>, <span class="title">class</span> <span class="title">Alloc</span> = <span class="title">alloc</span>&gt;</span></div><div class="line"><span class="title">class</span> <span class="title">hash_table</span> &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">typedef</span> HashFcn hasher;</div><div class="line">    <span class="keyword">typedef</span> EqualKey key_equal;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">size_t</span> size_type;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    hasher hash;</div><div class="line">    key_equal equals;</div><div class="line">    ExtractKey get_key;</div><div class="line">    <span class="keyword">typedef</span> __hashtable_node&lt;Value&gt; node;</div><div class="line">    <span class="built_in">vector</span>&lt;node*, Alloc&gt; buckets;</div><div class="line">    size_type num_elements;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function">size_type <span class="title">bucket_count</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> buckets.size(); &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Value</span>&gt; </span></div><div class="line"><span class="title">struct</span> __<span class="title">hashtable_node</span> &#123;</div><div class="line">    __hashtable_node *next;</div><div class="line">    Value val;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// hash_table iterators</span></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Value</span>, <span class="title">class</span> <span class="title">Key</span>, <span class="title">class</span> <span class="title">HashFcn</span>, <span class="title">class</span> <span class="title">ExtractKey</span>, <span class="title">class</span> <span class="title">EqualKey</span>, <span class="title">class</span> <span class="title">Alloc</span>&gt;</span></div><div class="line"><span class="title">struct</span> __<span class="title">hashtable_iterator</span> &#123;</div><div class="line">    node *cur;</div><div class="line">    hashtable *ht;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>首先看看hash_table的大小，其中有三个函数对象hash、equals和get_key，一共占用三个字节，buckets是一个vector含有三个指针占用12字节，num_elements占用4个字节。求和是19个字节，内存对齐后是20字节。然后注意下hash_table的iterator，它含有两个指针，分别是指向hash_table即bucket vector的ht和指向节点的指针cur。两个指针实现了对hash_table的遍历。</p>
-<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
 
           
         
@@ -734,7 +906,7 @@
 <h2 id="set、map源码分析"><a href="#set、map源码分析" class="headerlink" title="set、map源码分析"></a>set、map源码分析</h2><p>set、map的key值都不能随意改变，因为这会破坏红黑树的结构，因此在源码中都在key前加上了const限制。另外，set的key和value其实是同一个，而map中key、data却是分开的。侯老师在视频中说set、map更像是适配器，其实很形象，因为两者都是借助红黑树完成了所有功能，套了个壳而已。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Key</span>, <span class="title">class</span> <span class="title">Compare</span> = <span class="title">less</span>&lt;Key&gt;, <span class="title">class</span> <span class="title">Alloc</span> = <span class="title">alloc</span>&gt;</span></div><div class="line"><span class="title">class</span> <span class="title">set</span></div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">typedef</span> Key key_type;</div><div class="line">    <span class="keyword">typedef</span> Key value_type;</div><div class="line">    <span class="keyword">typedef</span> Compare key_compare;</div><div class="line">    <span class="keyword">typedef</span> Compare value_type;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    <span class="keyword">typedef</span> rb_tree&lt;key_type, value_type, identity&lt;value_type&gt;, key_compare, Alloc&gt; rep_type;</div><div class="line">    rep_type t;</div><div class="line"><span class="keyword">public</span>:</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">typename</span> rep_type::const_iterator iterator;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Key</span>, <span class="title">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Compare</span> = <span class="title">less</span>&lt;Key&gt;, <span class="title">class</span> <span class="title">Alloc</span> = <span class="title">alloc</span>&gt;</span></div><div class="line"><span class="title">class</span> <span class="title">map</span> &#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">typedef</span> Key key_type;</div><div class="line">    <span class="keyword">typedef</span> T data_type;</div><div class="line">    <span class="keyword">typedef</span> T mapped_type;</div><div class="line">    <span class="keyword">typedef</span> pair&lt;<span class="keyword">const</span> Key, t&gt; value_type; <span class="comment">//key 是 const的不能修改;</span></div><div class="line">    <span class="keyword">typedef</span> Compare key_compare;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    <span class="keyword">typedef</span> rb_tree&lt;key_type, value_type, select1st&lt;value_type&gt;, key_compare, Alloc&gt; rep_type;</div><div class="line">    rep_type t;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> rep_type::iterator iterator;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇文章可以说是相当简单的介绍了set、map的结构，其实最难的部分在于红黑树的学习理解上，有机会把红黑树简单梳理下。</p>
-<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
 
           
         
@@ -899,7 +1071,7 @@
         
           
             <h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>深度学习的浪潮已向我们袭来已久，可惜自己的研究方向不是深度学习，倍感惋惜。最近在和同学讨论时，对深度学习方法和传统方法进行了一些思考。现在，我做的仍然是传统的研究方法，在传统方法中，我们趋向于用简单的公式，优化函数等将问题进行建模，然后去寻找最优解。这样的方法简单，有较好的理论基础，并且我们发现这些方法可以适合很多实际应用中的问题，也就是说泛化性能更强。传统的方法更符合我们的认知，即偏向于把复杂的问题进行归纳，简化，然后进行建模求解。传统的方法研究多年，性能提升越来越慢，甚至有的已经到了瓶颈。后来深度学习的方法出现，又刷新了我们新的认知，但是深度学习的理论基础却相对薄弱，这两者对比其实是个有意思的事情。<br>传统的方法公式函数简单，因此描述能力有限，而各种问题也许并不是我们想像的那么直接。我们以前学过的定理公式很简单优美，但是在有些方面却有着很多近似条件的约束，因此要想精确的描述问题，公式还是会偏向复杂化。深度学习方法中，我把它看作是很多个基函数的组合，这些函数组合在一起经过训练最终能描述一个复杂的问题，至于理论这也许就很难去归纳，推倒。但是，它却能通过函数的组合，网络深度的加深来更好地描述问题，从而也能更好的去解决问题。深度学习方法也有其局限，复杂的东西可能对特定问题解决能力更强，但是对另外的相似问题可能不怎么work，也就是说神经网络需要对特定问题进行训练，它的泛化能力较弱。<br>我认为深度学习方法是一种更直接的认知问题的方式，问题本身也许就是复杂的，那就用复杂的方法去建模求解，至于理论，很难通过单纯的数学建模问题去解释。目前，我们传统方法的发展也是在偏向复杂化，很多时候，我们发现多加一些约束，或者多设置一些参数，可能就会达到比以前更好的效果。未来，也许就是这样，特定问题用特殊的方法去求解，而不是用一套方法去解决很多问题。</p>
-<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。该博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
 
           
         
@@ -1075,7 +1247,7 @@
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//指向指针的指针</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">set_node</span><span class="params">(map_pointer new_node)</span> </span>&#123;</div><div class="line">    node = new_node;</div><div class="line">    first = *new_node;</div><div class="line">    last = first + difference_type(buffer_size());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>new_node解引用得到一个指针即map中所存的值，该值又指向buffer。last指针只需要在first上移动buffer_size()即可。</p>
 <p>最后说一下stack 和 queue的底层容器都可选择list 或 dequeue，但是两者都不允许遍历，也不提供iterator。</p>
-<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
 
           
         
@@ -1251,7 +1423,7 @@
 <h2 id="forward-list"><a href="#forward-list" class="headerlink" title="forward_list"></a>forward_list</h2><p>forward_list是单向链表，应该说实现上和list很像。下面看forward_list的模型图。<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/forward_list.png" alt="forward_list"><br>在forward_list中有两个函数可以注意下</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function">iterator <span class="title">begin</span><span class="params">()</span> <span class="keyword">noexcept</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> iterator(<span class="keyword">this</span>-&gt;_M_impl._M_head._M_next);</div><div class="line">&#125;</div><div class="line"><span class="function">iterator <span class="title">end</span><span class="params">()</span> <span class="keyword">noexcept</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> iterator(<span class="number">0</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>forward_list中有一个伪头节点蓝色标记的，end()返回的实际上是一个空的节点。</p>
-<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
 
           
         
@@ -1427,7 +1599,7 @@
 <p>于是当我们需要知道指针或者Iterator的类型时就可以这样写：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//需要知道I的value type时可这么写:</span></div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> I, ...&gt;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">algorithm</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">typename</span> iterator_traits&lt;I&gt;::value_type v1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这里实际上是用了template的参数推导机制。根据变量I的类型来进行选择，这样就得到了相应的5种类型，使得普通指针也能用到我们的Algorithm中。</p>
-<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
 
           
         
@@ -1602,7 +1774,7 @@
 <p>解引用和(-&gt;)运算符返回的类型有一定差别，分别是引用和指针。这两者最终还是调用的built-in type的操作。举个例子：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">list</span>&lt;Foo&gt;::iterator ite;</div><div class="line">ite-&gt;method();</div><div class="line"><span class="comment">//相当于(*ite).method, *ite获得一个 Foo object;最后就是 object.method()</span></div><div class="line"><span class="comment">//相当于(&amp;(*ite))-&gt;method(); &amp;(*ite)得到一个对象指针，然后就相当于指针调用一个method;</span></div></pre></td></tr></table></figure>
 <p>另外需要注意的是在后置运算符重载的定义中 self tmp = *this 调用的是复制构造函数而不是*重载运算符。++*this 调用的是前置运算符重载，因为这是存在的运算符优先级关系。</p>
-<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
 
           
         
@@ -1803,169 +1975,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/27/张量的奇异值分解-t-SVD/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="chenlongxi">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/Fulan.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chen">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/27/张量的奇异值分解-t-SVD/" itemprop="url">张量的奇异值分解(t-SVD)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-27T20:13:08+08:00">
-                2017-10-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tensor-decomposition/" itemprop="url" rel="index">
-                    <span itemprop="name">tensor decomposition</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/10/27/张量的奇异值分解-t-SVD/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/10/27/张量的奇异值分解-t-SVD/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2017/10/27/张量的奇异值分解-t-SVD/" class="leancloud_visitors" data-flag-title="张量的奇异值分解(t-SVD)">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2016,7 +2025,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

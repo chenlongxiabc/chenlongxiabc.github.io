@@ -103,7 +103,7 @@
 <meta property="og:description" content="简介迭代器在容器中扮演着重要角色。在使用算法的过程中，我们也需要用到迭代器。迭代器可以看作是smart pointer，它是标准库中定义的一个class type。 Iterator 定义下面这段代码是标准库中对list_iterator的一个定义。 12345678template&amp;lt;class T, class Ref, class Ptr&amp;gt;struct __list_iterato">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/Iterator_traits.png">
-<meta property="og:updated_time" content="2017-11-12T03:07:18.014Z">
+<meta property="og:updated_time" content="2017-12-28T11:27:46.747Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="STL源码分析iterator">
 <meta name="twitter:description" content="简介迭代器在容器中扮演着重要角色。在使用算法的过程中，我们也需要用到迭代器。迭代器可以看作是smart pointer，它是标准库中定义的一个class type。 Iterator 定义下面这段代码是标准库中对list_iterator的一个定义。 12345678template&amp;lt;class T, class Ref, class Ptr&amp;gt;struct __list_iterato">
@@ -398,7 +398,7 @@
 <p>于是当我们需要知道指针或者Iterator的类型时就可以这样写：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//需要知道I的value type时可这么写:</span></div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> I, ...&gt;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">algorithm</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">typename</span> iterator_traits&lt;I&gt;::value_type v1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这里实际上是用了template的参数推导机制。根据变量I的类型来进行选择，这样就得到了相应的5种类型，使得普通指针也能用到我们的Algorithm中。</p>
-<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
 
       
     </div>
@@ -556,7 +556,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

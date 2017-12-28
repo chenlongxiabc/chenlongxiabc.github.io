@@ -273,6 +273,169 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/27/张量的奇异值分解-t-SVD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="chenlongxi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/Fulan.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/27/张量的奇异值分解-t-SVD/" itemprop="url">张量的奇异值分解(t-SVD)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-27T20:13:08+08:00">
+                2017-10-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/tensor-decomposition/" itemprop="url" rel="index">
+                    <span itemprop="name">tensor decomposition</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/10/27/张量的奇异值分解-t-SVD/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/10/27/张量的奇异值分解-t-SVD/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/10/27/张量的奇异值分解-t-SVD/" class="leancloud_visitors" data-flag-title="张量的奇异值分解(t-SVD)">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/20/SVM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -534,7 +697,7 @@
 <p>$$\partial ||E||_\ast  = \lbrace A B^T + D : A^TD=\mathbf{0}, DB= \mathbf{0}, ||D||_2 \leq 1 \rbrace$$</p>
 <p>令$A=U_0, B=V_0, D=W$，由Y的SVD分解定义可知：$U_0^T U_1=\mathbf{0}$，因此，$A^TD=\mathbf{0}, DB= \mathbf{0}$。又因为$\Sigma_1$奇异值小于$\tau$，所以$||D||_2 \leq 1$。结论$Y-\hat{X} \in \tau \partial ||\hat{X}||_\ast$得证。<br>更新$S$的式子只需要进行求导就可以得到解，在此不再赘述，需要注意的是$||X||_1$是各元素的绝对值之和，因此求导时需要注意。<br>最后的更新算法即:</p>
 <p><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/RPCA_algorithm.jpg" alt="RPCA_algorithm"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇文章对RPCA问题作了简单的介绍和推导，文中的算法是比较经典的用凸优化的方法来求解RPCA问题，当然还有很多其他经典的方法，因为数学太差不想多说。若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇文章对RPCA问题作了简单的介绍和推导，文中的算法是比较经典的用凸优化的方法来求解RPCA问题，当然还有很多其他经典的方法，因为数学太差不想多说。若有错误，欢迎讨论。该博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
 
           
         
@@ -701,7 +864,7 @@
             <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>主成分分析在信号处理中有着极其重要的作用，这里分析的主成分分析和机器学习中PCA降维略有差别，但是其实两者的实质是一样的。这篇博客会从矩阵理论的角度对主成分分析做一个细致的介绍。</p>
 <h2 id="PCA-模型"><a href="#PCA-模型" class="headerlink" title="PCA 模型"></a>PCA 模型</h2><p>PCA在矩阵问题中的最初模型是找到秩为k的矩阵$Z$来近似矩阵$A$。优化模型如下：<br>$$ \text{minimize} \quad ||A-Z||_F^2 \\<br>\text{subject to} \quad rank(Z) \leq k$$<br>这里假设矩阵$Z$的大小是$Z\in R^{m \times n}$。由于$Z$的秩是小于等于k的，所以可以令$Z=XY$，其中$X\in R^{m \times k}$，$Y\in R^{k \times n}$(为了简便直接令$rank(Z)=k$)。那么模型转化为$$\text{minimize} \quad ||A-XY||_F^2 = ||\Sigma-U^{T}XYV||_F^2$$，所以可以直接求解得到$XY=U\Sigma_k V^{T}$，然后让$X=U_k\Sigma_k^{1/2}$，$Y=\Sigma_k^{1/2} V_k^{T}$。很显然$X$,$Y$的解不是唯一的。例如它们的取值还可以是$X=U_k\Sigma_k^{1/2}G_k$，$Y=G_k^{-1}\Sigma_k^{1/2} V_k^{T}$。</p>
 <h2 id="二次正则化PCA"><a href="#二次正则化PCA" class="headerlink" title="二次正则化PCA"></a>二次正则化PCA</h2><p>为了对矩阵$X$和$Y$进行一定的约束，在目标函数中加上了二次正则项。这时求解过程会变得相对复杂些。我们首先看优化模型：<br>$$\text{minimize} ||A-XY||_F^2+r||X||_F^2+r||Y||_F^2$$<br>当然，$X\in R^{m \times k}$，$Y\in R^{k \times n}$。目标函数是一个二范数的凸函数，通过直接求导得出最小值。对$X$和$Y$的求导结果分别如下：<br>$$(XY-A)Y^{T} + rX=0, (XY-A)^{T}X + rY^{T} = 0$$其中的求导过程要用到矩阵迹的求导公式，$$||A||_F^2 = \sqrt{tr(A^{T}A)}$$<br>$$\frac{\partial}{X}Tr(B^{T}X^{T}CXB)=C^{T}XBB^{T}+CXBB^{T}$$<br>$$\frac{\partial}{X}Tr(AXB)=A^{T}B^{T} \quad \frac{\partial}{X}Tr(AX^{T}B)=BA$$<br>化简求导结果，我们可以得到如下等式，其中左边的等式乘以了$X^{T}$，右边等式乘以了$Y$。<br>$$X^{T}(A-XY)Y^{T}=rX^{T}X \quad Y(A-XY)^{T}X=rYY^{T}$$，所以$XX^{T}=Y^{T}Y$。利用上述结论重写我们的优化条件就是：<br>$$\left[<br>\begin{array}{cc}<br>-rI \quad A\\<br>A^{T} \quad -rI<br>\end{array}<br>\right] \left[<br>\begin{array}{c}<br>X\\<br>Y^{T}<br>\end{array}<br>\right] =<br>\left[<br>\begin{array}{c}<br>X\\<br>Y^{T}<br>\end{array}<br>\right] (X^{T}X)<br>$$<br>矩阵$X^{T}X$和矩阵$\left[<br>\begin{array}{cc}<br>-rI \quad A\\<br>A^{T} \quad -rI<br>\end{array}<br>\right]$有相同的特征值（注意是包含于的关系），并且特征向量张成的空间等于$\left[<br>\begin{array}{c}<br>X\\<br>Y^{T}<br>\end{array}<br>\right]$的子空间。假设$A=U\Sigma V$，那么矩阵$\left[<br>\begin{array}{cc}<br>-rI \quad A\\<br>A^{T} \quad -rI<br>\end{array}<br>\right]$ 的特征值为$-r\pm \sigma_i$，因为矩阵$X^{T}X$的特征值非负，所以其特征值为$-r+ \sigma_i(\sigma_i \geq r)$，对应的特征向量为<br>$\left[<br>\begin{array}{c}<br>u_i\\<br>v_i<br>\end{array}<br>\right]$。由于特征向量张成的空间等于$\left[<br>\begin{array}{c}<br>X\\<br>Y^{T}<br>\end{array}<br>\right]$的子空间。所以可以令$X=U_k(\Sigma_k - rI)^{\frac{1}{2}}$， $Y=(\Sigma_k - rI)^{\frac{1}{2}}V_k$，注意此时的$k$并不是前$k$个奇异值的含义，而是表示在正奇异值的集合中取出$k$个值。当然最后的结论肯定是前$k$个奇异值，只需要把我们的$X$和$Y$重新代入到目标函数中，就可以发现该结论。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇博客从矩阵分析的角度对PCA和二次正则化PCA作了简单的介绍，里面涉及到的矩阵理论知识较多，但也总算写完了，并给出了不太好的理解。博客参考了论文《Generalized Low Rank Models》。若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇博客从矩阵分析的角度对PCA和二次正则化PCA作了简单的介绍，里面涉及到的矩阵理论知识较多，但也总算写完了，并给出了不太好的理解。博客参考了论文《Generalized Low Rank Models》。若有错误，欢迎讨论。该博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
 
           
         
@@ -872,7 +1035,7 @@
 <h2 id="牛顿法的进一步修正"><a href="#牛顿法的进一步修正" class="headerlink" title="牛顿法的进一步修正"></a>牛顿法的进一步修正</h2><p>上述牛顿法作出了一个很重要的假设前提就是二阶导数或者Hessian矩阵存在，其中还要强调一点的是要保证Hessian矩阵正定。若Hessian矩阵奇异，那么不能确定后继点，简单理解就是对应一维情况时二阶泰勒展开的二次项系数为0，此时函数的泰勒展开是条直线，无法确定后继点。若Hessian矩阵非奇异，也未必正定，牛顿方向可能不是下降方向，简单说是二阶泰勒展开的二次项系数可能为负数，这样在选取后继点时，算法可能会失效。</p>
 <p>为了解决Hessian矩阵非正定的情况，是修正$\nabla^2 f(\mathbf{x_k})$，构造出一个对称正定矩阵$\mathbf{G_k}$，从而得到$d_k=-\mathbf{G_k}^{-1}\nabla f(\mathbf{x_k})$，再沿此方向作一维搜索。构造矩阵$\mathbf{G_k}$的方法是令<br>$$\mathbf{G_k}=\nabla^2 f(\mathbf{x_k})+\epsilon_k \mathbf{I}$$。此时，若$\alpha_k$是$\nabla^2 f(\mathbf{x_k})$的特征值，那么$\mathbf{G_k}$的特征值是$\alpha_k + \epsilon_k$，原因可以结合对称矩阵是可相似对角化的去理解。因此，只要$\epsilon_k$足够大，就能保证$\mathbf{G_k}$的正定性。</p>
 <p>其中需要我们注意的是当$\mathbf{x_k}$为鞍点时，有<br>$$\nabla f(\mathbf{x_k}) = 0, \nabla^2 f(\mathbf{x_k}) \text{不定}$$因此原来的搜索方向不能使用，此时的$d_k$应选取负曲率方向，即$d_k^{T} \nabla^2 f(\mathbf{x_k}) d_k &lt; 0$。这里涉及到负曲率方向的定义，在张贤达的《矩阵分析与应用》中说到，当矩阵$\mathbf{H}$是非线性函数$f(x)$的Hessian矩阵时，称满足$\mathbf{p^{H}Hp} &gt; 0$ 的向量$\mathbf{p}$为函数$f$的正曲率方向，满足$\mathbf{p^{H}Hp} &lt; 0$ 的向量$\mathbf{p}$为函数$f$的负曲率方向。标量$\mathbf{p}^{H}\mathbf{Hp}$称为函数$f$沿着方向$\mathbf{p}$的曲率。沿着负曲率方向进行一维搜索必能使目标函数值下降。</p>
-<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>牛顿法的迭代收敛速度很快，这里就要和传统的梯度下降法进行比较一下，梯度下降法只是利用了优化函数的一阶导数，相当于利用了速度的概念，而牛顿法利用了二阶导数，也就是梯度的梯度，相当于考虑了加速度的信息，所以收敛速度更快。更通俗的理解是如果我们的泰勒级数足够多，那么求其倒数为0，只需一步就可以直接求出最优解，当然这是极端情况，例如二次函数。但是，牛顿法涉及到求解Hessian矩阵，所以计算量、存储量很大，此篇博客参考了《最优化理论与算法》陈宝林老师的著作。若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>牛顿法的迭代收敛速度很快，这里就要和传统的梯度下降法进行比较一下，梯度下降法只是利用了优化函数的一阶导数，相当于利用了速度的概念，而牛顿法利用了二阶导数，也就是梯度的梯度，相当于考虑了加速度的信息，所以收敛速度更快。更通俗的理解是如果我们的泰勒级数足够多，那么求其倒数为0，只需一步就可以直接求出最优解，当然这是极端情况，例如二次函数。但是，牛顿法涉及到求解Hessian矩阵，所以计算量、存储量很大，此篇博客参考了《最优化理论与算法》陈宝林老师的著作。若有错误，欢迎讨论。该博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
 
           
         
@@ -1042,7 +1205,7 @@
 <h2 id="投影矩阵"><a href="#投影矩阵" class="headerlink" title="投影矩阵"></a>投影矩阵</h2><p><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/project.jpg" alt="project"></p>
 <p>投影矩阵的作用是把一个向量向另一个空间做投影，这个概念在机器学习中的作用就是降维，另外在线性判别分析（LDA）中也用到了投影的概念。上图中$P$就是投影矩阵，$Pb$就是经过投影矩阵$P$作用后的投影，从图中不难发现该投影是正交投影，另外还有斜投影。它们之间有一定的区别，正交投影矩阵满足Hermitte特性。另外所有的投影矩阵满足$P^2=P$,因为投影的再投影是其本身即$P \cdot Pb=Pb$,并且向量$b$是任意的，所以存在等式$P^2=P$。综合起来，正交投影矩阵应该满足两条性质（1）$P^{H}=P$，（2）$P^2=P$。<br>其实从投影的结果来看实际上是把原来的向量投影到投影矩阵$P$的列空间里，因为向量$b$就是对矩阵列向量的线性组合。</p>
 <h2 id="投影矩阵和最小二乘之间的联系"><a href="#投影矩阵和最小二乘之间的联系" class="headerlink" title="投影矩阵和最小二乘之间的联系"></a>投影矩阵和最小二乘之间的联系</h2><p>我们在解决线性方程$Ax = b$的时候常常会遇到无解的情况，其实这时候的一种理解是在矩阵$A$的列向量空间中无法找到$x$将向量$b$表示出来，那么我们就可以想到一种求其近似解的思路，即将向量$b$通过投影矩阵P向矩阵$A$的列空间作投影，那么其投影就是可以用列空间中的向量表示出来的。由于投影的做法会有多种，但是为了保证欧式距离$|| b-Pb ||_2$的距离最小，因此作的投影应该是正交投影。我们假设经过上述近似后，原来的求解问题变成了$A\overline{x}=Pb$的近似解。<br>既然投影$Pb$是落在矩阵$A$的列空间中，那么通过正交性有$A^{T}(b-Pb)=0$，所以有<br>$A^{T}(b-A\overline{x})=0\\<br>A^{T}A\overline{x}=A^{T}b$<br>若$A$的列向量满足不相关或独立性，那么$\overline{x}=(A^{T}A)^{-1}A^{T}b$，并且有投影矩阵$P=A(A^{T}A)^{-1}A^{T}$。上述就是通过投影矩阵来求解线性方程的近似解。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上述内容对矩阵空间、投影矩阵以及投影矩阵和最小二乘之间的联系作了简单介绍。在MIT的矩阵课中有更详细的介绍。若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上述内容对矩阵空间、投影矩阵以及投影矩阵和最小二乘之间的联系作了简单介绍。在MIT的矩阵课中有更详细的介绍。若有错误，欢迎讨论。该博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
 
           
         
@@ -1209,7 +1372,7 @@
             <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>图像非局部均值滤波的原理利用了噪声的非相关的特性。如下图所示，在一幅图像中，具有相同像素的图像块是很多的，而其中的噪声是不相关的,当然不相关的假设是很强的，这里应该说是噪声的相关性很弱，该假设也是符合一定的实际应用场景的。<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/filter.jpg" alt="Image"></p>
 <h2 id="原理分析推导"><a href="#原理分析推导" class="headerlink" title="原理分析推导"></a>原理分析推导</h2><p>我们假设无噪声像素块的值为$f(x,y)$，加性噪声为$n(x,y)$,那么添加噪声后的像素块的值为$g(x,y)=f(x,y)+n(x,y)$。我们把多个相似的像素块进行叠加后取均值得到$\overline{g}(x,y)=\frac{1}{K}\sum_{i=1}^{K}g_i(x,y)$。此处应注意相似是个模糊的概念，以量化的观点看是两个相似块间的距离大小，这个距离可以是欧式距离等，为了对原理进行粗略的说明，下面的推导中把相似的概念强化了。应用概率的观点，我们对叠加处理取平均后的像素块求期望得到，$$E[{\overline{g}(x,y)]}=\frac{1}{K}\sum_{i=1}^{K}(E[f_i(x,y)]+E[n(x,y)])$$.<br>由于像素块的相似性，上式中右边式子的第一项化简为$f(x,y)$，第二项由于假设噪声的均值为0，所以$$E[\overline{g}(x,y)]=f(x,y)$$.另外由于噪声的非相关性，我们可以得到$g(x,y)$的方差计算公式为$${\sigma_{\overline{g}}}^2={\sigma_f}^2+\frac{1}{K^2}({\sigma_{\eta_1}}^2+{\sigma_{\eta_2}}^2+\dots+{\sigma_{\eta_{K}}}^2)$$<br>所以，最后推导出的方差为：<br>$${\sigma_{\overline{g}}}^2=\frac{K}{K^2}{\sigma_{\eta}}^2=\frac{1}{K}{\sigma_{\eta}}^2$$.<br>其中${\sigma_f}^2$为无噪声的像素块的方差值为0.</p>
 <p>由此可见，通过非局部均值的方法可以进行图像的去噪。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文是在阅读论文<a href="http://www.ipol.im/pub/art/2011/bcm_nlm/" target="_blank" rel="external">“Non-Local Means Denoising”</a>后编写的，其中的假设推倒参考了圣经《数字图像处理》,若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文是在阅读论文<a href="http://www.ipol.im/pub/art/2011/bcm_nlm/" target="_blank" rel="external">“Non-Local Means Denoising”</a>后编写的，其中的假设推倒参考了圣经《数字图像处理》,若有错误，欢迎讨论。该博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
 
           
         
@@ -1467,7 +1630,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

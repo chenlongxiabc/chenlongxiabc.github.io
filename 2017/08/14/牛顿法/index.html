@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="Chen">
 <meta property="og:description" content="简介在凸优化问题的求解方法中有很多具体可行的优化方法，例如梯度下降法、牛顿法、交替方向乘子法（ADMM）等。这篇文章会对求解一般无约束问题的牛顿法做个简单粗略的介绍，让我们明白它的基本原理，知道如何使用它。复杂的证明和讨论不在文中涉及，毕竟不是数学专业，学的不深。 牛顿法原理分析首先我们从最简单的一维情况开始。它的基本思想是在现有的参考点附近对$f(x)$做二阶泰勒展开，然后找到一个极小点作为下一">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-08T02:25:09.424Z">
+<meta property="og:updated_time" content="2017-12-28T11:30:58.659Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="牛顿法">
 <meta name="twitter:description" content="简介在凸优化问题的求解方法中有很多具体可行的优化方法，例如梯度下降法、牛顿法、交替方向乘子法（ADMM）等。这篇文章会对求解一般无约束问题的牛顿法做个简单粗略的介绍，让我们明白它的基本原理，知道如何使用它。复杂的证明和讨论不在文中涉及，毕竟不是数学专业，学的不深。 牛顿法原理分析首先我们从最简单的一维情况开始。它的基本思想是在现有的参考点附近对$f(x)$做二阶泰勒展开，然后找到一个极小点作为下一">
@@ -391,7 +391,7 @@
 <h2 id="牛顿法的进一步修正"><a href="#牛顿法的进一步修正" class="headerlink" title="牛顿法的进一步修正"></a>牛顿法的进一步修正</h2><p>上述牛顿法作出了一个很重要的假设前提就是二阶导数或者Hessian矩阵存在，其中还要强调一点的是要保证Hessian矩阵正定。若Hessian矩阵奇异，那么不能确定后继点，简单理解就是对应一维情况时二阶泰勒展开的二次项系数为0，此时函数的泰勒展开是条直线，无法确定后继点。若Hessian矩阵非奇异，也未必正定，牛顿方向可能不是下降方向，简单说是二阶泰勒展开的二次项系数可能为负数，这样在选取后继点时，算法可能会失效。</p>
 <p>为了解决Hessian矩阵非正定的情况，是修正$\nabla^2 f(\mathbf{x_k})$，构造出一个对称正定矩阵$\mathbf{G_k}$，从而得到$d_k=-\mathbf{G_k}^{-1}\nabla f(\mathbf{x_k})$，再沿此方向作一维搜索。构造矩阵$\mathbf{G_k}$的方法是令<br>$$\mathbf{G_k}=\nabla^2 f(\mathbf{x_k})+\epsilon_k \mathbf{I}$$。此时，若$\alpha_k$是$\nabla^2 f(\mathbf{x_k})$的特征值，那么$\mathbf{G_k}$的特征值是$\alpha_k + \epsilon_k$，原因可以结合对称矩阵是可相似对角化的去理解。因此，只要$\epsilon_k$足够大，就能保证$\mathbf{G_k}$的正定性。</p>
 <p>其中需要我们注意的是当$\mathbf{x_k}$为鞍点时，有<br>$$\nabla f(\mathbf{x_k}) = 0, \nabla^2 f(\mathbf{x_k}) \text{不定}$$因此原来的搜索方向不能使用，此时的$d_k$应选取负曲率方向，即$d_k^{T} \nabla^2 f(\mathbf{x_k}) d_k &lt; 0$。这里涉及到负曲率方向的定义，在张贤达的《矩阵分析与应用》中说到，当矩阵$\mathbf{H}$是非线性函数$f(x)$的Hessian矩阵时，称满足$\mathbf{p^{H}Hp} &gt; 0$ 的向量$\mathbf{p}$为函数$f$的正曲率方向，满足$\mathbf{p^{H}Hp} &lt; 0$ 的向量$\mathbf{p}$为函数$f$的负曲率方向。标量$\mathbf{p}^{H}\mathbf{Hp}$称为函数$f$沿着方向$\mathbf{p}$的曲率。沿着负曲率方向进行一维搜索必能使目标函数值下降。</p>
-<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>牛顿法的迭代收敛速度很快，这里就要和传统的梯度下降法进行比较一下，梯度下降法只是利用了优化函数的一阶导数，相当于利用了速度的概念，而牛顿法利用了二阶导数，也就是梯度的梯度，相当于考虑了加速度的信息，所以收敛速度更快。更通俗的理解是如果我们的泰勒级数足够多，那么求其倒数为0，只需一步就可以直接求出最优解，当然这是极端情况，例如二次函数。但是，牛顿法涉及到求解Hessian矩阵，所以计算量、存储量很大，此篇博客参考了《最优化理论与算法》陈宝林老师的著作。若有错误，欢迎讨论。所有博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>牛顿法的迭代收敛速度很快，这里就要和传统的梯度下降法进行比较一下，梯度下降法只是利用了优化函数的一阶导数，相当于利用了速度的概念，而牛顿法利用了二阶导数，也就是梯度的梯度，相当于考虑了加速度的信息，所以收敛速度更快。更通俗的理解是如果我们的泰勒级数足够多，那么求其倒数为0，只需一步就可以直接求出最优解，当然这是极端情况，例如二次函数。但是，牛顿法涉及到求解Hessian矩阵，所以计算量、存储量很大，此篇博客参考了《最优化理论与算法》陈宝林老师的著作。若有错误，欢迎讨论。该博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
 
       
     </div>
@@ -547,7 +547,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
