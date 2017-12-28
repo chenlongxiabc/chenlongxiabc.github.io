@@ -94,20 +94,18 @@
 
 
 
-<meta name="description" content="简介STL的六大部件分别是容器、迭代器、算法、仿函数、适配器和分配器。分配器主要是用来分配内存空间的，其底层实现就是malloc。容器、迭代器和算法在前面的文章已经写过。这篇文章主要是简要分析functor和adapter。  functors前面已经说过仿函数在算法中有着重要的应用。下面是在算法sort中调用不同仿函数的实例。 123456789101112131415161718192021/">
+<meta name="description" content="简介STL的六大部件分别是容器、迭代器、算法、仿函数、适配器和分配器。分配器主要是用来分配内存空间的，其底层实现就是malloc。容器、迭代器和算法在前面的文章已经写过。这篇文章主要是简要分析functor和adapter。 functors前面已经说过仿函数在算法中有着重要的应用。下面是在算法sort中调用不同仿函数的实例。 123456789101112131415161718192021//">
 <meta name="keywords" content="STL,C++">
 <meta property="og:type" content="article">
 <meta property="og:title" content="STL源码分析functor和adapter">
 <meta property="og:url" content="http://yoursite.com/2017/12/28/STL源码分析functor和adapter/index.html">
 <meta property="og:site_name" content="Chen">
-<meta property="og:description" content="简介STL的六大部件分别是容器、迭代器、算法、仿函数、适配器和分配器。分配器主要是用来分配内存空间的，其底层实现就是malloc。容器、迭代器和算法在前面的文章已经写过。这篇文章主要是简要分析functor和adapter。  functors前面已经说过仿函数在算法中有着重要的应用。下面是在算法sort中调用不同仿函数的实例。 123456789101112131415161718192021/">
+<meta property="og:description" content="简介STL的六大部件分别是容器、迭代器、算法、仿函数、适配器和分配器。分配器主要是用来分配内存空间的，其底层实现就是malloc。容器、迭代器和算法在前面的文章已经写过。这篇文章主要是简要分析functor和adapter。 functors前面已经说过仿函数在算法中有着重要的应用。下面是在算法sort中调用不同仿函数的实例。 123456789101112131415161718192021//">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/STL.png">
-<meta property="og:updated_time" content="2017-12-28T11:55:43.739Z">
+<meta property="og:updated_time" content="2017-12-28T11:58:28.496Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="STL源码分析functor和adapter">
-<meta name="twitter:description" content="简介STL的六大部件分别是容器、迭代器、算法、仿函数、适配器和分配器。分配器主要是用来分配内存空间的，其底层实现就是malloc。容器、迭代器和算法在前面的文章已经写过。这篇文章主要是简要分析functor和adapter。  functors前面已经说过仿函数在算法中有着重要的应用。下面是在算法sort中调用不同仿函数的实例。 123456789101112131415161718192021/">
-<meta name="twitter:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/STL.png">
+<meta name="twitter:description" content="简介STL的六大部件分别是容器、迭代器、算法、仿函数、适配器和分配器。分配器主要是用来分配内存空间的，其底层实现就是malloc。容器、迭代器和算法在前面的文章已经写过。这篇文章主要是简要分析functor和adapter。 functors前面已经说过仿函数在算法中有着重要的应用。下面是在算法sort中调用不同仿函数的实例。 123456789101112131415161718192021//">
 
 
 
@@ -387,7 +385,6 @@
 
       
         <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>STL的六大部件分别是容器、迭代器、算法、仿函数、适配器和分配器。分配器主要是用来分配内存空间的，其底层实现就是malloc。容器、迭代器和算法在前面的文章已经写过。这篇文章主要是简要分析functor和adapter。</p>
-<p><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/STL.png" alt="STL"></p>
 <h2 id="functors"><a href="#functors" class="headerlink" title="functors"></a>functors</h2><p>前面已经说过仿函数在算法中有着重要的应用。下面是在算法sort中调用不同仿函数的实例。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// using default comparison</span></div><div class="line">sort(vec.begin(), vec.end());</div><div class="line"><span class="comment">// using function as comp</span></div><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">myfunc</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> i &lt; j;</div><div class="line">&#125;</div><div class="line">sort(vec.begin(), vec.end(), myfunc);</div><div class="line"><span class="comment">// using object as comp</span></div><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">myclass</span></span></div><div class="line">&#123;</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> i &lt; j;</div><div class="line">    &#125;</div><div class="line">&#125; myobj;</div><div class="line">sort(vec.begin(), vec.end(), myobj);</div><div class="line"><span class="comment">// using explicitly default comparison</span></div><div class="line">sort(vec.begin(), vec.end(), less&lt;<span class="keyword">int</span>&gt;);</div><div class="line"><span class="comment">// using another comparision criteria</span></div><div class="line">sort(vec.begin(), vec.end(), greater&lt;<span class="keyword">int</span>&gt;);</div></pre></td></tr></table></figure>
 <p>另外要注意的是在标准库中定义的仿函数都继承了unary_function（一元操作符函数）或者binary_function（二元操作符函数）,这两个都只是对类型进行了定义。</p>
