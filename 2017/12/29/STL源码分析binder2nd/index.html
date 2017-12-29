@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="tensor," />
+  <meta name="keywords" content="STL,C++," />
 
 
 
@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="Everything is possible !">
-<meta name="keywords" content="tensor">
+<meta name="description" content="简介binder2nd是一个函数适配器，这篇文章想通过一个函数调用对这个adapter进行详细的分析。 分析我们的主函数是一条语句，计算数组中比50小的元素个数。 1cout &amp;lt;&amp;lt; count_if(vec.begin(), vec.end(), bind2nd(less&amp;lt;int&amp;gt;(), 50)); 上面这段代码中count_if是主角，因此对它先进行下研究。 123456">
+<meta name="keywords" content="STL,C++">
 <meta property="og:type" content="article">
-<meta property="og:title" content="张量的奇异值分解(t-SVD)">
-<meta property="og:url" content="http://yoursite.com/2017/10/27/张量的奇异值分解-t-SVD/index.html">
+<meta property="og:title" content="STL源码分析binder2nd">
+<meta property="og:url" content="http://yoursite.com/2017/12/29/STL源码分析binder2nd/index.html">
 <meta property="og:site_name" content="Chen">
-<meta property="og:description" content="Everything is possible !">
+<meta property="og:description" content="简介binder2nd是一个函数适配器，这篇文章想通过一个函数调用对这个adapter进行详细的分析。 分析我们的主函数是一条语句，计算数组中比50小的元素个数。 1cout &amp;lt;&amp;lt; count_if(vec.begin(), vec.end(), bind2nd(less&amp;lt;int&amp;gt;(), 50)); 上面这段代码中count_if是主角，因此对它先进行下研究。 123456">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-27T12:15:31.875Z">
+<meta property="og:updated_time" content="2017-12-29T08:08:08.181Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="张量的奇异值分解(t-SVD)">
-<meta name="twitter:description" content="Everything is possible !">
+<meta name="twitter:title" content="STL源码分析binder2nd">
+<meta name="twitter:description" content="简介binder2nd是一个函数适配器，这篇文章想通过一个函数调用对这个adapter进行详细的分析。 分析我们的主函数是一条语句，计算数组中比50小的元素个数。 1cout &amp;lt;&amp;lt; count_if(vec.begin(), vec.end(), bind2nd(less&amp;lt;int&amp;gt;(), 50)); 上面这段代码中count_if是主角，因此对它先进行下研究。 123456">
 
 
 
@@ -134,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/10/27/张量的奇异值分解-t-SVD/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/12/29/STL源码分析binder2nd/"/>
 
 
 
 
 
-  <title>张量的奇异值分解(t-SVD) | Chen</title>
+  <title>STL源码分析binder2nd | Chen</title>
   
 
 
@@ -273,7 +273,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/27/张量的奇异值分解-t-SVD/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/29/STL源码分析binder2nd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="chenlongxi">
@@ -290,7 +290,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">张量的奇异值分解(t-SVD)</h1>
+          <h1 class="post-title" itemprop="name headline">STL源码分析binder2nd</h1>
         
 
         <div class="post-meta">
@@ -302,8 +302,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-27T20:13:08+08:00">
-                2017-10-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-29T15:12:56+08:00">
+                2017-12-29
               </time>
             
 
@@ -325,8 +325,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tensor-decomposition/" itemprop="url" rel="index">
-                    <span itemprop="name">tensor decomposition</span>
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
                   </a>
                 </span>
 
@@ -343,9 +343,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/10/27/张量的奇异值分解-t-SVD/#comments" itemprop="discussionUrl">
+                <a href="/2017/12/29/STL源码分析binder2nd/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/10/27/张量的奇异值分解-t-SVD/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2017/12/29/STL源码分析binder2nd/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -353,7 +353,7 @@
 
           
           
-             <span id="/2017/10/27/张量的奇异值分解-t-SVD/" class="leancloud_visitors" data-flag-title="张量的奇异值分解(t-SVD)">
+             <span id="/2017/12/29/STL源码分析binder2nd/" class="leancloud_visitors" data-flag-title="STL源码分析binder2nd">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -384,7 +384,19 @@
       
 
       
-        
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>binder2nd是一个函数适配器，这篇文章想通过一个函数调用对这个adapter进行详细的分析。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>我们的主函数是一条语句，计算数组中比50小的元素个数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cout</span> &lt;&lt; count_if(vec.begin(), vec.end(), bind2nd(less&lt;<span class="keyword">int</span>&gt;(), <span class="number">50</span>));</div></pre></td></tr></table></figure>
+<p>上面这段代码中count_if是主角，因此对它先进行下研究。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// count_if 模板</span></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">InputIterator</span>, <span class="title">class</span> <span class="title">Predicate</span>&gt;</span></div><div class="line"><span class="title">typename</span> <span class="title">iterator_traits</span>&lt;InputIterator&gt;:: <span class="function">difference_type</span></div><div class="line"><span class="title">count_if</span><span class="params">(InputIterator first, InputIterator last, Predicate pred)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">typename</span> iterator_traits&lt;InputIterator&gt;::difference_type n = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span> (; first != last; ++first)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (pred(*first)) ++n;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> n;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意到pred应该是一个函数对象，要能够对参数*first进行判断。其返回类型是difference_type定义了一长串。</p>
+<p>首先看下less模板</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// less 模板</span></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Arg1</span>, <span class="title">class</span> <span class="title">Arg2</span>, <span class="title">class</span> <span class="title">Result</span>&gt;</span></div><div class="line"><span class="title">struct</span> <span class="title">binary_function</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">typedef</span> Arg1 first_argument_type;</div><div class="line">    <span class="keyword">typedef</span> Arg2 second_argument_type;</div><div class="line">    <span class="keyword">typedef</span> Result result_type;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></div><div class="line"><span class="title">struct</span> <span class="title">less</span>: <span class="keyword">public</span> binary_function&lt;T,T,<span class="keyword">bool</span>&gt;</div><div class="line">&#123;</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">const</span> T &amp;x, <span class="keyword">const</span> T &amp;y)</span> <span class="keyword">const</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> x &lt; y;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>less模板继承了二元function，因此有了三个类型名，可以回答算法的提问。less<int>() 是一个可调用函数对象，需要两个函数参数。下面主要看如何进行参数绑定的。<br>先看看bind2nd的源代码：</int></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">operation</span>, <span class="title">class</span> <span class="title">T</span>&gt;</span></div><div class="line"><span class="title">inline</span> <span class="title">binder2nd</span>&lt;operation&gt; <span class="title">bind2nd</span>(<span class="title">const</span> <span class="title">Operation</span> &amp;<span class="title">op</span>, <span class="title">const</span> <span class="title">T</span>&amp; <span class="title">x</span>)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> Operation::second_argument_type arg2_type;</div><div class="line">    <span class="keyword">return</span> binder2nd&lt;Operation&gt;(op, arg2_type(x));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>毫无疑问bind2nd是一个函数模板，在调用该函数时首先进行函数模板参数推断，得到operation就是less<int>。这样，由于less<int>继承了binary_function,所以less<int>::second_argument_type就是int。注意typedef typename中的typename是用来告诉编译器这是个类型，从而能够编译通过。bind2nd()函数模板返回的是一个可调用函数对象binder2nd<operation>()，与前面看过的count_if模板相对应。下面看看binder2nd类模板。</operation></int></int></int></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">Operation</span>&gt;</span></div><div class="line"><span class="title">class</span> <span class="title">binder2nd</span>: <span class="keyword">public</span> unary_function&lt;<span class="keyword">typename</span> Operation::first_argument_type,</div><div class="line"><span class="keyword">typename</span> Operation::second_argument_type&gt;</div><div class="line">&#123;</div><div class="line"><span class="keyword">protected</span>:</div><div class="line">    Operation op;</div><div class="line">    <span class="keyword">typename</span> Operation::second_argument_type value;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="comment">// 构造函数</span></div><div class="line">    binder2nd(<span class="keyword">const</span> Operation &amp;x, <span class="keyword">const</span> <span class="keyword">typename</span> Operation::second_argument_type &amp;y): op(x), value(y)&#123;&#125;</div><div class="line">    <span class="keyword">typename</span> Operation::<span class="function">result_type</span></div><div class="line">    <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">const</span> <span class="keyword">typename</span> Operation::first_argument_type &amp;x)</span> <span class="keyword">const</span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> op(x, value);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
       
     </div>
     
@@ -430,7 +442,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/tensor/" rel="tag"># tensor</a>
+            <a href="/tags/STL/" rel="tag"># STL</a>
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
           
         </div>
       
@@ -443,8 +457,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/20/SVM/" rel="next" title="SVM">
-                <i class="fa fa-chevron-left"></i> SVM
+              <a href="/2017/12/28/STL源码分析functor和adapter/" rel="next" title="STL源码分析functor和adapter">
+                <i class="fa fa-chevron-left"></i> STL源码分析functor和adapter
               </a>
             
           </div>
@@ -452,10 +466,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/10/30/A-generative-vision-model-RCN/" rel="prev" title="A generative vision model - RCN">
-                A generative vision model - RCN <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -514,8 +524,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/Fulan.jpg"
@@ -612,6 +631,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分析"><span class="nav-number">1.1.</span> <span class="nav-text">分析</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -754,9 +789,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2017/10/27/张量的奇异值分解-t-SVD/';
-          this.page.identifier = '2017/10/27/张量的奇异值分解-t-SVD/';
-          this.page.title = '张量的奇异值分解(t-SVD)';
+          this.page.url = 'http://yoursite.com/2017/12/29/STL源码分析binder2nd/';
+          this.page.identifier = '2017/12/29/STL源码分析binder2nd/';
+          this.page.title = 'STL源码分析binder2nd';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://chenlongxiabc.disqus.com/embed.js';
