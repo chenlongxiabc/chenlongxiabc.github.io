@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="tensor," />
+  <meta name="keywords" content="STL,C++," />
 
 
 
@@ -94,18 +94,21 @@
 
 
 
-<meta name="description" content="Everything is possible !">
-<meta name="keywords" content="tensor">
+<meta name="description" content="简介前面介绍了容器适配器stack、queue和函数适配器binder2nd。这篇文章主要介绍迭代器适配器reverse_iterator和inserter。 reverse_iteratorreverse_iterator主要是反转了迭代器。下图是一个简单的示意图。我们看看rbegin()和rend()函数： 12345678reverse_iterator rbegin()&amp;#123;">
+<meta name="keywords" content="STL,C++">
 <meta property="og:type" content="article">
-<meta property="og:title" content="张量的奇异值分解(t-SVD)">
-<meta property="og:url" content="http://yoursite.com/2017/10/27/张量的奇异值分解-t-SVD/index.html">
+<meta property="og:title" content="STL源码分析reverse_iterator和inserter">
+<meta property="og:url" content="http://yoursite.com/2018/01/02/STL源码分析inserter/index.html">
 <meta property="og:site_name" content="Chen">
-<meta property="og:description" content="Everything is possible !">
+<meta property="og:description" content="简介前面介绍了容器适配器stack、queue和函数适配器binder2nd。这篇文章主要介绍迭代器适配器reverse_iterator和inserter。 reverse_iteratorreverse_iterator主要是反转了迭代器。下图是一个简单的示意图。我们看看rbegin()和rend()函数： 12345678reverse_iterator rbegin()&amp;#123;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-27T12:15:31.875Z">
+<meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/reverse_iterator.png">
+<meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/inserter.png">
+<meta property="og:updated_time" content="2018-01-03T03:42:35.570Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="张量的奇异值分解(t-SVD)">
-<meta name="twitter:description" content="Everything is possible !">
+<meta name="twitter:title" content="STL源码分析reverse_iterator和inserter">
+<meta name="twitter:description" content="简介前面介绍了容器适配器stack、queue和函数适配器binder2nd。这篇文章主要介绍迭代器适配器reverse_iterator和inserter。 reverse_iteratorreverse_iterator主要是反转了迭代器。下图是一个简单的示意图。我们看看rbegin()和rend()函数： 12345678reverse_iterator rbegin()&amp;#123;">
+<meta name="twitter:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/reverse_iterator.png">
 
 
 
@@ -134,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/10/27/张量的奇异值分解-t-SVD/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/02/STL源码分析inserter/"/>
 
 
 
 
 
-  <title>张量的奇异值分解(t-SVD) | Chen</title>
+  <title>STL源码分析reverse_iterator和inserter | Chen</title>
   
 
 
@@ -273,7 +276,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/27/张量的奇异值分解-t-SVD/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/02/STL源码分析inserter/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="chenlongxi">
@@ -290,7 +293,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">张量的奇异值分解(t-SVD)</h1>
+          <h1 class="post-title" itemprop="name headline">STL源码分析reverse_iterator和inserter</h1>
         
 
         <div class="post-meta">
@@ -302,8 +305,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-27T20:13:08+08:00">
-                2017-10-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-02T09:28:20+08:00">
+                2018-01-02
               </time>
             
 
@@ -325,8 +328,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/tensor-decomposition/" itemprop="url" rel="index">
-                    <span itemprop="name">tensor decomposition</span>
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
                   </a>
                 </span>
 
@@ -343,9 +346,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/10/27/张量的奇异值分解-t-SVD/#comments" itemprop="discussionUrl">
+                <a href="/2018/01/02/STL源码分析inserter/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/10/27/张量的奇异值分解-t-SVD/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/01/02/STL源码分析inserter/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -353,7 +356,7 @@
 
           
           
-             <span id="/2017/10/27/张量的奇异值分解-t-SVD/" class="leancloud_visitors" data-flag-title="张量的奇异值分解(t-SVD)">
+             <span id="/2018/01/02/STL源码分析inserter/" class="leancloud_visitors" data-flag-title="STL源码分析reverse_iterator和inserter">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -384,7 +387,21 @@
       
 
       
-        
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>前面介绍了容器适配器stack、queue和函数适配器binder2nd。这篇文章主要介绍迭代器适配器reverse_iterator和inserter。</p>
+<h2 id="reverse-iterator"><a href="#reverse-iterator" class="headerlink" title="reverse_iterator"></a>reverse_iterator</h2><p>reverse_iterator主要是反转了迭代器。下图是一个简单的示意图。<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/reverse_iterator.png" alt="reverse_iterator"><br>我们看看rbegin()和rend()函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function">reverse_iterator <span class="title">rbegin</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> reverse_iterator(end());</div><div class="line">&#125;</div><div class="line"><span class="function">reverse_iterator <span class="title">rend</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> reverse_iterator(begin());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>两个函数的关键是reverse_iterator类模板，然后返回的是reverse_iterator。reverse_iterator源代码如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">template &lt;class Iterator&gt;</div><div class="line">class reverse_iterator</div><div class="line">&#123;</div><div class="line">protected:</div><div class="line">    Iterator current;</div><div class="line">public:</div><div class="line">// 逆向迭代器的5种associated types都和其对应的正向迭代器相同</div><div class="line">    typedef typename iterator_traits&lt;Iterator&gt;::iterator_category iterator_category;</div><div class="line">    typedef typename iterator_traits&lt;Iterator&gt;::value_type value_type;</div><div class="line">    ...</div><div class="line">    typedef Iterator iterator_type; // 代表正向迭代器</div><div class="line">    typedef reverse_iterator&lt;Iterator&gt; self; // 代表逆向迭代器</div><div class="line"></div><div class="line">public:</div><div class="line">    explicit reverse_iterator(iterator_type x) : current(x) &#123;&#125;</div><div class="line">             reverse_iterator(const self &amp; x) : current(x.current) &#123;&#125;</div><div class="line">    iterator_type base() const &#123;return current; &#125;</div><div class="line">    reference operator*() const &#123; Iterator tmp = current; return *--tmp; &#125;</div><div class="line">    // 反向迭代器要先后移一位然后调用原本实现的解引用操作。</div><div class="line">    pointer operator-&gt;() const &#123;return &amp;(*operator()); &#125; </div><div class="line">    // 成员访问运算符重载调用解引用操作</div><div class="line"></div><div class="line">    // 自增自减运算符全部变成相反的操作</div><div class="line">    self &amp;operator++() &#123; --currten; return *this; &#125;</div><div class="line">    self &amp;operator--() &#123; ++current; return *this; &#125;</div><div class="line">    self operator+(difference_type n) const &#123; return self(current - n); &#125;</div><div class="line">    self operator-(difference_type n) const &#123; return self(current + n); &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>reverse_iterator(begin()) 和 reverse_iterator(end())分别是使用构造函数生成了reverse_iterator对象,然后进行后面的操作.</p>
+<h2 id="inserter"><a href="#inserter" class="headerlink" title="inserter"></a>inserter</h2><p>inserter这个迭代器适配器的主要功能是把迭代器表示范围内的元素copy到目标容器中。主要代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">copy(bar.begin(), bar.end(), inserter(foo,it))</div></pre></td></tr></table></figure>
+<p>下图是一组copy的操作：<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/inserter.png" alt="inserter"><br>copy的源代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">InputIterator</span>, <span class="title">class</span> <span class="title">OutputIterator</span>&gt;</span></div><div class="line"><span class="title">OutputIterator</span> <span class="title">copy</span>(<span class="title">InputIterator</span> <span class="title">first</span>, <span class="title">InputIterator</span> <span class="title">last</span>, <span class="title">OutputIterator</span> <span class="title">result</span>)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">while</span> (first != last)</div><div class="line">    &#123;</div><div class="line">        <span class="comment">//注意赋值操作实际是调用重载操作符，返回一个insert_iterator</span></div><div class="line">        *result = *first; </div><div class="line">        ++result; ++first;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>copy把元素复制到inserter(foo,it)返回的insert_iterator中，然后每次赋值操作都会调用重载的运算符。下面看看inserter源代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Container</span>, <span class="title">class</span> <span class="title">Iterator</span>&gt;</span></div><div class="line"><span class="title">inline</span> <span class="title">insert_iterator</span>&lt;Container&gt;</div><div class="line"><span class="title">inserter</span>(<span class="title">Container</span> &amp;<span class="title">x</span>, <span class="title">Iterator</span> <span class="title">i</span>)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> Container::iterator iter;</div><div class="line">    <span class="keyword">return</span> insert_iterator&lt;Container&gt;(x, iter(i));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Container</span>&gt;</span></div><div class="line"><span class="title">class</span> <span class="title">insert_iterator</span></div><div class="line">&#123;</div><div class="line"><span class="keyword">protected</span>:</div><div class="line">    Container *container; <span class="comment">//底层容器</span></div><div class="line">    <span class="keyword">typename</span> Container::iterator iter;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">typedef</span> output_iterator_tag iterator_category; </div><div class="line">    insert_iterator(Container &amp;x, <span class="keyword">typename</span> Container::iterator i)</div><div class="line">    : container(&amp;x), iter(i) &#123;&#125;</div><div class="line"></div><div class="line">    insert_iterator&lt;Container&gt; &amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <span class="keyword">typename</span> Container::value_type &amp;value)</div><div class="line">    &#123;</div><div class="line">        <span class="comment">// 调用底层容器的insert操作</span></div><div class="line">        iter = container-&gt;insert(iter, value);</div><div class="line">        ++iter;</div><div class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在insert_iterator对象中包含两个成员分别是底层容器container和迭代器iter，每次赋值其实就是调用insert操作，因此需要移动迭代器iter指向刚刚创造出的空间。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
+
       
     </div>
     
@@ -430,7 +447,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/tensor/" rel="tag"># tensor</a>
+            <a href="/tags/STL/" rel="tag"># STL</a>
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
           
         </div>
       
@@ -443,8 +462,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/20/SVM/" rel="next" title="SVM">
-                <i class="fa fa-chevron-left"></i> SVM
+              <a href="/2017/12/29/STL源码分析binder2nd/" rel="next" title="STL源码分析binder2nd">
+                <i class="fa fa-chevron-left"></i> STL源码分析binder2nd
               </a>
             
           </div>
@@ -452,10 +471,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/10/30/A-generative-vision-model-RCN/" rel="prev" title="A generative vision model - RCN">
-                A generative vision model - RCN <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -514,8 +529,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/Fulan.jpg"
@@ -612,6 +636,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#reverse-iterator"><span class="nav-number">1.1.</span> <span class="nav-text">reverse_iterator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#inserter"><span class="nav-number">1.2.</span> <span class="nav-text">inserter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#声明"><span class="nav-number">1.3.</span> <span class="nav-text">声明</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -754,9 +794,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2017/10/27/张量的奇异值分解-t-SVD/';
-          this.page.identifier = '2017/10/27/张量的奇异值分解-t-SVD/';
-          this.page.title = '张量的奇异值分解(t-SVD)';
+          this.page.url = 'http://yoursite.com/2018/01/02/STL源码分析inserter/';
+          this.page.identifier = '2018/01/02/STL源码分析inserter/';
+          this.page.title = 'STL源码分析reverse_iterator和inserter';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://chenlongxiabc.disqus.com/embed.js';

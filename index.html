@@ -273,6 +273,183 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/02/STL源码分析inserter/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="chenlongxi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/Fulan.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/02/STL源码分析inserter/" itemprop="url">STL源码分析reverse_iterator和inserter</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-02T09:28:20+08:00">
+                2018-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/02/STL源码分析inserter/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/02/STL源码分析inserter/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/01/02/STL源码分析inserter/" class="leancloud_visitors" data-flag-title="STL源码分析reverse_iterator和inserter">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>前面介绍了容器适配器stack、queue和函数适配器binder2nd。这篇文章主要介绍迭代器适配器reverse_iterator和inserter。</p>
+<h2 id="reverse-iterator"><a href="#reverse-iterator" class="headerlink" title="reverse_iterator"></a>reverse_iterator</h2><p>reverse_iterator主要是反转了迭代器。下图是一个简单的示意图。<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/reverse_iterator.png" alt="reverse_iterator"><br>我们看看rbegin()和rend()函数：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function">reverse_iterator <span class="title">rbegin</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> reverse_iterator(end());</div><div class="line">&#125;</div><div class="line"><span class="function">reverse_iterator <span class="title">rend</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> reverse_iterator(begin());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>两个函数的关键是reverse_iterator类模板，然后返回的是reverse_iterator。reverse_iterator源代码如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">template &lt;class Iterator&gt;</div><div class="line">class reverse_iterator</div><div class="line">&#123;</div><div class="line">protected:</div><div class="line">    Iterator current;</div><div class="line">public:</div><div class="line">// 逆向迭代器的5种associated types都和其对应的正向迭代器相同</div><div class="line">    typedef typename iterator_traits&lt;Iterator&gt;::iterator_category iterator_category;</div><div class="line">    typedef typename iterator_traits&lt;Iterator&gt;::value_type value_type;</div><div class="line">    ...</div><div class="line">    typedef Iterator iterator_type; // 代表正向迭代器</div><div class="line">    typedef reverse_iterator&lt;Iterator&gt; self; // 代表逆向迭代器</div><div class="line"></div><div class="line">public:</div><div class="line">    explicit reverse_iterator(iterator_type x) : current(x) &#123;&#125;</div><div class="line">             reverse_iterator(const self &amp; x) : current(x.current) &#123;&#125;</div><div class="line">    iterator_type base() const &#123;return current; &#125;</div><div class="line">    reference operator*() const &#123; Iterator tmp = current; return *--tmp; &#125;</div><div class="line">    // 反向迭代器要先后移一位然后调用原本实现的解引用操作。</div><div class="line">    pointer operator-&gt;() const &#123;return &amp;(*operator()); &#125; </div><div class="line">    // 成员访问运算符重载调用解引用操作</div><div class="line"></div><div class="line">    // 自增自减运算符全部变成相反的操作</div><div class="line">    self &amp;operator++() &#123; --currten; return *this; &#125;</div><div class="line">    self &amp;operator--() &#123; ++current; return *this; &#125;</div><div class="line">    self operator+(difference_type n) const &#123; return self(current - n); &#125;</div><div class="line">    self operator-(difference_type n) const &#123; return self(current + n); &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>reverse_iterator(begin()) 和 reverse_iterator(end())分别是使用构造函数生成了reverse_iterator对象,然后进行后面的操作.</p>
+<h2 id="inserter"><a href="#inserter" class="headerlink" title="inserter"></a>inserter</h2><p>inserter这个迭代器适配器的主要功能是把迭代器表示范围内的元素copy到目标容器中。主要代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">copy(bar.begin(), bar.end(), inserter(foo,it))</div></pre></td></tr></table></figure>
+<p>下图是一组copy的操作：<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/inserter.png" alt="inserter"><br>copy的源代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">InputIterator</span>, <span class="title">class</span> <span class="title">OutputIterator</span>&gt;</span></div><div class="line"><span class="title">OutputIterator</span> <span class="title">copy</span>(<span class="title">InputIterator</span> <span class="title">first</span>, <span class="title">InputIterator</span> <span class="title">last</span>, <span class="title">OutputIterator</span> <span class="title">result</span>)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">while</span> (first != last)</div><div class="line">    &#123;</div><div class="line">        <span class="comment">//注意赋值操作实际是调用重载操作符，返回一个insert_iterator</span></div><div class="line">        *result = *first; </div><div class="line">        ++result; ++first;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>copy把元素复制到inserter(foo,it)返回的insert_iterator中，然后每次赋值操作都会调用重载的运算符。下面看看inserter源代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Container</span>, <span class="title">class</span> <span class="title">Iterator</span>&gt;</span></div><div class="line"><span class="title">inline</span> <span class="title">insert_iterator</span>&lt;Container&gt;</div><div class="line"><span class="title">inserter</span>(<span class="title">Container</span> &amp;<span class="title">x</span>, <span class="title">Iterator</span> <span class="title">i</span>)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> Container::iterator iter;</div><div class="line">    <span class="keyword">return</span> insert_iterator&lt;Container&gt;(x, iter(i));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">Container</span>&gt;</span></div><div class="line"><span class="title">class</span> <span class="title">insert_iterator</span></div><div class="line">&#123;</div><div class="line"><span class="keyword">protected</span>:</div><div class="line">    Container *container; <span class="comment">//底层容器</span></div><div class="line">    <span class="keyword">typename</span> Container::iterator iter;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">typedef</span> output_iterator_tag iterator_category; </div><div class="line">    insert_iterator(Container &amp;x, <span class="keyword">typename</span> Container::iterator i)</div><div class="line">    : container(&amp;x), iter(i) &#123;&#125;</div><div class="line"></div><div class="line">    insert_iterator&lt;Container&gt; &amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <span class="keyword">typename</span> Container::value_type &amp;value)</div><div class="line">    &#123;</div><div class="line">        <span class="comment">// 调用底层容器的insert操作</span></div><div class="line">        iter = container-&gt;insert(iter, value);</div><div class="line">        ++iter;</div><div class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在insert_iterator对象中包含两个成员分别是底层容器container和迭代器iter，每次赋值其实就是调用insert操作，因此需要移动迭代器iter指向刚刚创造出的空间。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/29/STL源码分析binder2nd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1812,181 +1989,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/06/STL源码分析List/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="chenlongxi">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/Fulan.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chen">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/06/STL源码分析List/" itemprop="url">STL源码分析List</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-06T10:00:51+08:00">
-                2017-11-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index">
-                    <span itemprop="name">C++</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/06/STL源码分析List/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/06/STL源码分析List/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2017/11/06/STL源码分析List/" class="leancloud_visitors" data-flag-title="STL源码分析List">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>最近在看侯捷老师的STL剖析课程。边看课顺便记下笔记，算是对自己的监督吧。侯捷老师的课程选用的是cygnus C++ 2.91.57 for windows 版本，虽然年代久远但是看起来要容易很多，而我看的是SGI的STL版本，内容上应该差不多，主要是阅读起来方便。最近在看书，我很喜欢侯捷老师书中的一句话，“天下大事必作于细”，与君共勉。</p>
-<h2 id="List内容介绍"><a href="#List内容介绍" class="headerlink" title="List内容介绍"></a>List内容介绍</h2><p>List 在标准库中指的是双向链表，而我们在数据结构中自己定义的可能是单向链表，基本原理差不多。另外，要注意的是标准库的双向链表其实是环状链表，示意图如下：<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/list2.jpg" alt="list2"><br>注意图中有一个灰色的节点，该节点就是我们常用的list<t>.end()尾后迭代器所指向的地方。但是要注意该节点不属于我们定义的list内容，因此对它解引用会出现越界的错误。</t></p>
-<h2 id="List代码简析"><a href="#List代码简析" class="headerlink" title="List代码简析"></a>List代码简析</h2><p>下面的代码是对list_node的定义，从类模板的定义中可以知道，一个节点包括两个空指针和一个T类型的data。空指针其实可以换为list_node类型指针，后面的标准库中进行了更换。空指针是无类型指针，任何指针都可以直接赋值给它。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></div><div class="line"><span class="title">struct</span> __<span class="title">list_node</span> </div><div class="line">&#123;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">void</span>* void_pointer;</div><div class="line">    void_pointer prev;</div><div class="line">    void_pointer next;</div><div class="line">    T data;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>接下来看下运算符重载，这主要是针对list中iterator的运算符。iterator其实也是一个类模板。下面看看主要代码，代码中的类型定义不要太过于纠结，主要看其实现原理。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Alloc</span>=<span class="title">alloc</span>&gt;</span></div><div class="line"><span class="title">class</span> <span class="title">list</span>&#123;</div><div class="line"><span class="keyword">protected</span>:</div><div class="line">    <span class="keyword">typedef</span> __list_node&lt;T&gt; list_node;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">typedef</span> list_node* link_type;</div><div class="line">    <span class="keyword">typedef</span> __list_iterator&lt;T, T&amp;, T*&gt; iterator;</div><div class="line"><span class="keyword">protected</span>:</div><div class="line">    link_type node;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Ref</span>, <span class="title">class</span> <span class="title">Ptr</span>&gt;</span></div><div class="line"><span class="title">struct</span> __<span class="title">list_iterator</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">typedef</span> T value_type;</div><div class="line">    <span class="keyword">typedef</span> Ptr pointer;</div><div class="line">    <span class="keyword">typedef</span> Ref reference;</div><div class="line">    <span class="keyword">typedef</span> __list_node&lt;T&gt;* link_type;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">ptrdiff_t</span> difference_type;</div><div class="line">    link_type node;</div><div class="line"></div><div class="line">    reference <span class="keyword">operator</span>*() <span class="keyword">const</span> &#123;<span class="keyword">return</span> (*node).data;&#125;</div><div class="line">    pointer <span class="keyword">operator</span>-&gt;() <span class="keyword">const</span> &#123;<span class="keyword">return</span> &amp;(<span class="keyword">operator</span>*());&#125;</div><div class="line">    self &amp; <span class="keyword">operator</span>++()</div><div class="line">    &#123;node = (link_type)((*node).next); <span class="keyword">return</span> *<span class="keyword">this</span>;&#125;</div><div class="line">    self <span class="keyword">operator</span>++(<span class="keyword">int</span>)</div><div class="line">    &#123;self tmp = *<span class="keyword">this</span>; ++*<span class="keyword">this</span>; <span class="keyword">return</span> tmp;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>其中，我觉得首先要注意的是运算符重载的顺序，我们可以发现iterator的解引用重载发生在(-&gt;)操作符重载之前，而后置递增运算符在前置运算符之后，其中的目的很明显，主要是后一个要用到前一个，所以我们在用到运算符重载的时候也应该注意这样的顺序，减少代码量。</p>
-<p>递增运算符重载肯定返回的是调用者本身的类型即iterator类型。所以是返回*this。而前置递增运算符返回的是+1之后的iterator，而这里的+1其实就是让原先的指针node变成下一个node。注意前置运算符返回的是引用，而后置运算符不是。后置运算符多加了一个函数参数int，加上该参数的目的是为了区分前置与后置运算符，理由是当我们在调用这两种运算符时，只有一个函数参数即iterator的对象，所以无法区分，因此加上了一个函数参数int。而我们在调用时却不用写成i++5，理由是编译器会给我们加上，然后就可以区分了。后置递增运算符需要先保存以前的对象，然后再利用前置运算符进行递增，饭后旧的iterator。</p>
-<p>解引用和(-&gt;)运算符返回的类型有一定差别，分别是引用和指针。这两者最终还是调用的built-in type的操作。举个例子：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">list</span>&lt;Foo&gt;::iterator ite;</div><div class="line">ite-&gt;method();</div><div class="line"><span class="comment">//相当于(*ite).method, *ite获得一个 Foo object;最后就是 object.method()</span></div><div class="line"><span class="comment">//相当于(&amp;(*ite))-&gt;method(); &amp;(*ite)得到一个对象指针，然后就相当于指针调用一个method;</span></div></pre></td></tr></table></figure>
-<p>另外需要注意的是在后置运算符重载的定义中 self tmp = *this 调用的是复制构造函数而不是*重载运算符。++*this 调用的是前置运算符重载，因为这是存在的运算符优先级关系。</p>
-<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2037,7 +2039,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2136,7 +2138,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
