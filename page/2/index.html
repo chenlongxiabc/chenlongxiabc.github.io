@@ -273,6 +273,182 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/08/STL源码分析iterator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="chenlongxi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/Fulan.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/08/STL源码分析iterator/" itemprop="url">STL源码分析iterator</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-08T09:27:09+08:00">
+                2017-11-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/08/STL源码分析iterator/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2017/11/08/STL源码分析iterator/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/11/08/STL源码分析iterator/" class="leancloud_visitors" data-flag-title="STL源码分析iterator">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>迭代器在容器中扮演着重要角色。在使用算法的过程中，我们也需要用到迭代器。迭代器可以看作是smart pointer，它是标准库中定义的一个class type。</p>
+<h2 id="Iterator-定义"><a href="#Iterator-定义" class="headerlink" title="Iterator 定义"></a>Iterator 定义</h2><p>下面这段代码是标准库中对list_iterator的一个定义。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Ref</span>, <span class="title">class</span> <span class="title">Ptr</span>&gt;</span></div><div class="line"><span class="title">struct</span> __<span class="title">list_iterator</span>&#123;</div><div class="line">    <span class="keyword">typedef</span> bidirectional_iterator_tag iterator_category;</div><div class="line">    <span class="keyword">typedef</span> T value_type;</div><div class="line">    <span class="keyword">typedef</span> Ptr pointer;</div><div class="line">    <span class="keyword">typedef</span> Ref reference;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">ptrdiff_t</span> difference_type;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从定义中我们可以看到iterator内部有5种类型，而算法在在调用iterator过程中需要知道这5种类型是什么，然后才有接下来的操作。这时候就会出现一个问题，那么我们怎么区分普通的指针和iterator呢？普通指针也是可以用于标准算法的，例子如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; vec = &#123; <span class="number">1</span>, <span class="number">4</span>, <span class="number">8</span>,<span class="number">10</span> &#125;;</div><div class="line"><span class="keyword">auto</span> m = find_if(vec.begin(), vec.end(), [](<span class="keyword">const</span> <span class="keyword">int</span> &amp;a) &#123;<span class="keyword">return</span> a &gt; <span class="number">6</span>; &#125;);</div></pre></td></tr></table></figure>
+<p>而对于iterator我们获取其中的5种类型方式是：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">I</span>&gt;</span></div><div class="line"><span class="title">struct</span> <span class="title">iterator_traits</span>&#123;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">typename</span> I::value_type value_type;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>Iterator_traits是萃取机，用于获取不同迭代器或者指针对应的5种类型。这种方式对于普通指针肯定是不行的，下面就利用了partial template specialization 的方法。代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//partial specialization</span></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></div><div class="line"><span class="title">struct</span> <span class="title">iterator_traits</span>(<span class="title">T</span>*) &#123;</div><div class="line">    <span class="keyword">typedef</span> T value_type;</div><div class="line">&#125;</div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></div><div class="line"><span class="title">struct</span> <span class="title">iterator_traits</span>(<span class="title">const</span> <span class="title">T</span>*) &#123;</div><div class="line">    <span class="keyword">typedef</span> T value_type;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>于是当我们需要知道指针或者Iterator的类型时就可以这样写：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//需要知道I的value type时可这么写:</span></div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> I, ...&gt;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">algorithm</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">typename</span> iterator_traits&lt;I&gt;::value_type v1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里实际上是用了template的参数推导机制。根据变量I的类型来进行选择，这样就得到了相应的5种类型，使得普通指针也能用到我们的Algorithm中。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/06/STL源码分析List/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1748,183 +1924,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/25/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="chenlongxi">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/Fulan.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chen">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/25/hello-world/" itemprop="url">支持向量机</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T10:11:49+08:00">
-                2017-07-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Machine-Learning/" itemprop="url" rel="index">
-                    <span itemprop="name">Machine Learning</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/07/25/hello-world/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/07/25/hello-world/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2017/07/25/hello-world/" class="leancloud_visitors" data-flag-title="支持向量机">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1970,7 +1974,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
