@@ -273,6 +273,177 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/11/可变参数模板的两个实例/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="chenlongxi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/Fulan.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/11/可变参数模板的两个实例/" itemprop="url">可变参数模板的两个实例</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-11T16:27:42+08:00">
+                2018-01-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/11/可变参数模板的两个实例/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/11/可变参数模板的两个实例/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/01/11/可变参数模板的两个实例/" class="leancloud_visitors" data-flag-title="可变参数模板的两个实例">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>模板是C++的一块重要内容，在模板中比较复杂的就是可变参数模板。这篇文章主要通过三个实例来进行可变参数模板的学习，包括类模板和函数模板，其中涉及到模板递归和模板的特化与偏特化。</p>
+<h2 id="类模板"><a href="#类模板" class="headerlink" title="类模板"></a>类模板</h2><p>下面是一个打印tuple元素的例子，例如我们创建了一个tuple为make_tuple(5, “hello”, bitset<16>(80))，那么打印输出为{5,hello,0000000001010000}。当然写程序的方法有很多，下面的代码只是为了学习可变参数的类模板实例。</16></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">int</span> id, <span class="keyword">int</span> Max, <span class="keyword">typename</span>... Args&gt;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">print_tuple</span> //类模板</span></div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(ostream &amp;os, <span class="keyword">const</span> tuple&lt;Args...&gt; &amp;t)</span></span></div><div class="line">	&#123;</div><div class="line">		os &lt;&lt; get&lt;id&gt;(t) &lt;&lt; (id + <span class="number">1</span> == Max ? <span class="string">""</span> : <span class="string">","</span>);</div><div class="line">		print_tuple&lt;id + <span class="number">1</span>, <span class="keyword">sizeof</span>...(Args), Args...&gt;::print(os, t);<span class="comment">//递归调用函数的同时，也会创建类（实例化），</span></div><div class="line">		<span class="comment">//这个过程中id会不断加1，直到前两个类型参数相同时会调用偏特化模板</span></div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">int</span> Max, <span class="keyword">typename</span>... Args&gt;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">print_tuple</span>&lt;Max, Max, Args...&gt; // 偏特化模板</span></div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(ostream &amp;os, <span class="keyword">const</span> tuple&lt;Args...&gt; &amp;t)</span></span></div><div class="line">	&#123;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</div><div class="line">ostream &amp;<span class="keyword">operator</span>&lt;&lt;(ostream &amp;os, <span class="keyword">const</span> tuple&lt;Args...&gt; &amp;t)</div><div class="line">&#123;</div><div class="line">	os &lt;&lt; <span class="string">"&#123;"</span>;</div><div class="line">	print_tuple&lt;<span class="number">0</span>, <span class="keyword">sizeof</span>...(Args), Args...&gt;::print(os, t);</div><div class="line">	<span class="keyword">return</span> os &lt;&lt; <span class="string">"&#125;"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面这个例子是在递归实例化类模板。下面是一个递归继承的类模板，和上面的实例相比要更复杂一点，我们在这个例子中表述的继承关系如图所示：<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/variadic_template.png" alt="variadic_template"><br>实例代码如下，设计巧妙的地方在于构造函数存在递归调用关系，而不是创建临时对象。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Values&gt; <span class="class"><span class="keyword">class</span> <span class="title">my_tuple</span>;</span> <span class="comment">//通用版本</span></div><div class="line"><span class="keyword">template</span> &lt;&gt; <span class="class"><span class="keyword">class</span> <span class="title">my_tuple</span>&lt;&gt; &#123;</span>&#125;; <span class="comment">// 特例化版本</span></div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Head, <span class="keyword">typename</span>... Tail&gt;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">my_tuple</span>&lt;Head, Tail...&gt; :</span> <span class="keyword">private</span> my_tuple&lt;Tail...&gt;</div><div class="line">&#123;</div><div class="line">	<span class="keyword">typedef</span> my_tuple&lt;Tail...&gt; inherited;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	my_tuple() &#123;&#125;</div><div class="line">	my_tuple(Head v, Tail... vtail) : m_head(v), inherited(vtail...) &#123;&#125; <span class="comment">//调用类模板的构造函数</span></div><div class="line"></div><div class="line">	<span class="function">Head <span class="title">head</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> m_head; &#125;</div><div class="line">	<span class="function">inherited&amp; <span class="title">tail</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> *<span class="keyword">this</span>; &#125; <span class="comment">//子类对象转化成父类引用</span></div><div class="line"><span class="keyword">protected</span>:</div><div class="line">	Head m_head;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<h2 id="函数模板"><a href="#函数模板" class="headerlink" title="函数模板"></a>函数模板</h2><p>函数模板没有偏特化一说，主要是全特化和普通的函数模板。下面的实例实现了一个简单的功能就是print(12, 30.90, “he”)，代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></div><div class="line"><span class="title">void</span> <span class="title">print</span>(<span class="title">const</span> <span class="title">T</span> &amp;<span class="title">t</span>) // 这是递归调用结束的条件</div><div class="line">&#123;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; t &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="keyword">const</span> T &amp;t, <span class="keyword">const</span> Args&amp;... args)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; t &lt;&lt; <span class="string">" "</span>;</div><div class="line">	print(args...);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>应该说函数模板和类模板相比起来要容易很多，但是需要注意递归结束的条件，把握这一点应该就没有太大的问题。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/03/STL源码分析hash-function/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1807,182 +1978,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/18/STL-源码分析deque/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="chenlongxi">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/Fulan.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chen">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/18/STL-源码分析deque/" itemprop="url">STL 源码分析deque</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-18T11:09:10+08:00">
-                2017-11-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index">
-                    <span itemprop="name">C++</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/18/STL-源码分析deque/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/18/STL-源码分析deque/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2017/11/18/STL-源码分析deque/" class="leancloud_visitors" data-flag-title="STL 源码分析deque">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>deque是双端队列，支持快速随机访问。在前后位置插入/删除元素较快，它是vector和array的组合体，等下从结构中就可以看到，其实还应该加上list。string在侯捷老师后面的视频没有具体说明，但是在primer中说它和vector相似，因此结构不会很难。</p>
-<h2 id="deque结构"><a href="#deque结构" class="headerlink" title="deque结构"></a>deque结构</h2><p><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/deque2.png" alt="deque"></p>
-<p>deque的结构设计很巧妙。deque中是以buffer为存储单位，当存储空间不够时，它会增加一个buffer的空间，buffer的大小在旧版中可以指定，后面则默认设置了。上图中的buffer就是可以存储8个int的空间。中间的map其实是一个vector，注意这个vector是用来模拟deque的，意思就是vector的元素不是从头往后放置的，而是从中间到两边放置存储，因此当vector需要扩充时，元素是被copy到中间位置。vector中放置的是指针，该指针指向相应的buffer，这里就有点像list了。</p>
-<p>iterator包含了四个指针，其代码如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">Ref</span>, <span class="title">class</span> <span class="title">Ptr</span>, <span class="title">size_t</span> <span class="title">BufSiz</span>&gt;</span></div><div class="line"><span class="title">struct</span> __<span class="title">deque_iterator</span> &#123;</div><div class="line">    <span class="keyword">typedef</span> random_access_iterator_tag iterator_category;</div><div class="line">    <span class="keyword">typedef</span> T value_type;</div><div class="line">    <span class="keyword">typedef</span> Ptr pointer;</div><div class="line">    <span class="keyword">typedef</span> Ref reference;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">size_t</span> size_type;</div><div class="line">    <span class="keyword">typedef</span> <span class="keyword">ptrdiff_t</span> difference_type;</div><div class="line">    <span class="keyword">typedef</span> T** map_pointer;</div><div class="line">    <span class="keyword">typedef</span> __deque_iterator self;</div><div class="line"></div><div class="line">    T* cur;</div><div class="line">    T* first;</div><div class="line">    T* last;</div><div class="line">    map_pointer node;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>其中cur指向当前元素值，first指向buffer的首元素，finish则指向buffer的尾元素。node类型为指针的指针，指向map即vector容器中的指向buffer的指针。</p>
-<p>了解完deque的基本结构，下面看deque中定义的函数。下面是insert函数，在position处插入一个元素其值为x。（注意position是一个位置迭代器）</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function">iterator <span class="title">insert</span><span class="params">(iterator position, <span class="keyword">const</span> value_type &amp;x)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (position.cur == start.cur)&#123; <span class="comment">//如果安插点在最前端</span></div><div class="line">        push_front(x);</div><div class="line">        <span class="keyword">return</span> start;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (position.cur == finish.cur)&#123;</div><div class="line">        push_back(x);</div><div class="line">        iterator tmp = finish;</div><div class="line">        --tmp;</div><div class="line">        <span class="keyword">return</span> tmp;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> insert_aux(position, x);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>当元素插入位置在最前端或者后端时都可以借助push_front()和push_back()函数来完成。当插入位置在中间时需要借助辅助函数，其操作和vector的insert_aux类似。另外一个比较重要的操作是设置指针值，见下面代码：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//指向指针的指针</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">set_node</span><span class="params">(map_pointer new_node)</span> </span>&#123;</div><div class="line">    node = new_node;</div><div class="line">    first = *new_node;</div><div class="line">    last = first + difference_type(buffer_size());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>new_node解引用得到一个指针即map中所存的值，该值又指向buffer。last指针只需要在first上移动buffer_size()即可。</p>
-<p>最后说一下stack 和 queue的底层容器都可选择list 或 dequeue，但是两者都不允许遍历，也不提供iterator。</p>
-<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2033,7 +2028,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-count">23</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

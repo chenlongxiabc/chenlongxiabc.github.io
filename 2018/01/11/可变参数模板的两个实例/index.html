@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Denoising," />
+  <meta name="keywords" content="C++," />
 
 
 
@@ -94,20 +94,20 @@
 
 
 
-<meta name="description" content="简介图像非局部均值滤波的原理利用了噪声的非相关的特性。如下图所示，在一幅图像中，具有相同像素的图像块是很多的，而其中的噪声是不相关的,当然不相关的假设是很强的，这里应该说是噪声的相关性很弱，该假设也是符合一定的实际应用场景的。 原理分析推导我们假设无噪声像素块的值为$f(x,y)$，加性噪声为$n(x,y)$,那么添加噪声后的像素块的值为$g(x,y)=f(x,y)+n(x,y)$。我们把多个相似">
-<meta name="keywords" content="Denoising">
+<meta name="description" content="简介模板是C++的一块重要内容，在模板中比较复杂的就是可变参数模板。这篇文章主要通过三个实例来进行可变参数模板的学习，包括类模板和函数模板，其中涉及到模板递归和模板的特化与偏特化。 类模板下面是一个打印tuple元素的例子，例如我们创建了一个tuple为make_tuple(5, “hello”, bitset(80))，那么打印输出为{5,hello,0000000001010000}。当然写程">
+<meta name="keywords" content="C++">
 <meta property="og:type" content="article">
-<meta property="og:title" content="图像非局部均值滤波的原理">
-<meta property="og:url" content="http://yoursite.com/2017/07/25/图像非局部均值滤波的原理/index.html">
+<meta property="og:title" content="可变参数模板的两个实例">
+<meta property="og:url" content="http://yoursite.com/2018/01/11/可变参数模板的两个实例/index.html">
 <meta property="og:site_name" content="Chen">
-<meta property="og:description" content="简介图像非局部均值滤波的原理利用了噪声的非相关的特性。如下图所示，在一幅图像中，具有相同像素的图像块是很多的，而其中的噪声是不相关的,当然不相关的假设是很强的，这里应该说是噪声的相关性很弱，该假设也是符合一定的实际应用场景的。 原理分析推导我们假设无噪声像素块的值为$f(x,y)$，加性噪声为$n(x,y)$,那么添加噪声后的像素块的值为$g(x,y)=f(x,y)+n(x,y)$。我们把多个相似">
+<meta property="og:description" content="简介模板是C++的一块重要内容，在模板中比较复杂的就是可变参数模板。这篇文章主要通过三个实例来进行可变参数模板的学习，包括类模板和函数模板，其中涉及到模板递归和模板的特化与偏特化。 类模板下面是一个打印tuple元素的例子，例如我们创建了一个tuple为make_tuple(5, “hello”, bitset(80))，那么打印输出为{5,hello,0000000001010000}。当然写程">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/filter.jpg">
-<meta property="og:updated_time" content="2017-12-28T11:29:00.830Z">
+<meta property="og:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/variadic_template.png">
+<meta property="og:updated_time" content="2018-01-11T12:21:49.861Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="图像非局部均值滤波的原理">
-<meta name="twitter:description" content="简介图像非局部均值滤波的原理利用了噪声的非相关的特性。如下图所示，在一幅图像中，具有相同像素的图像块是很多的，而其中的噪声是不相关的,当然不相关的假设是很强的，这里应该说是噪声的相关性很弱，该假设也是符合一定的实际应用场景的。 原理分析推导我们假设无噪声像素块的值为$f(x,y)$，加性噪声为$n(x,y)$,那么添加噪声后的像素块的值为$g(x,y)=f(x,y)+n(x,y)$。我们把多个相似">
-<meta name="twitter:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/filter.jpg">
+<meta name="twitter:title" content="可变参数模板的两个实例">
+<meta name="twitter:description" content="简介模板是C++的一块重要内容，在模板中比较复杂的就是可变参数模板。这篇文章主要通过三个实例来进行可变参数模板的学习，包括类模板和函数模板，其中涉及到模板递归和模板的特化与偏特化。 类模板下面是一个打印tuple元素的例子，例如我们创建了一个tuple为make_tuple(5, “hello”, bitset(80))，那么打印输出为{5,hello,0000000001010000}。当然写程">
+<meta name="twitter:image" content="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/variadic_template.png">
 
 
 
@@ -136,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/07/25/图像非局部均值滤波的原理/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/11/可变参数模板的两个实例/"/>
 
 
 
 
 
-  <title>图像非局部均值滤波的原理 | Chen</title>
+  <title>可变参数模板的两个实例 | Chen</title>
   
 
 
@@ -275,7 +275,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/25/图像非局部均值滤波的原理/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/11/可变参数模板的两个实例/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="chenlongxi">
@@ -292,7 +292,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">图像非局部均值滤波的原理</h1>
+          <h1 class="post-title" itemprop="name headline">可变参数模板的两个实例</h1>
         
 
         <div class="post-meta">
@@ -304,8 +304,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-25T20:15:01+08:00">
-                2017-07-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-11T16:27:42+08:00">
+                2018-01-11
               </time>
             
 
@@ -327,8 +327,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Image-Processing/" itemprop="url" rel="index">
-                    <span itemprop="name">Image Processing</span>
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
                   </a>
                 </span>
 
@@ -345,9 +345,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2017/07/25/图像非局部均值滤波的原理/#comments" itemprop="discussionUrl">
+                <a href="/2018/01/11/可变参数模板的两个实例/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/07/25/图像非局部均值滤波的原理/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/01/11/可变参数模板的两个实例/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -355,7 +355,7 @@
 
           
           
-             <span id="/2017/07/25/图像非局部均值滤波的原理/" class="leancloud_visitors" data-flag-title="图像非局部均值滤波的原理">
+             <span id="/2018/01/11/可变参数模板的两个实例/" class="leancloud_visitors" data-flag-title="可变参数模板的两个实例">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -386,10 +386,14 @@
       
 
       
-        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>图像非局部均值滤波的原理利用了噪声的非相关的特性。如下图所示，在一幅图像中，具有相同像素的图像块是很多的，而其中的噪声是不相关的,当然不相关的假设是很强的，这里应该说是噪声的相关性很弱，该假设也是符合一定的实际应用场景的。<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/filter.jpg" alt="Image"></p>
-<h2 id="原理分析推导"><a href="#原理分析推导" class="headerlink" title="原理分析推导"></a>原理分析推导</h2><p>我们假设无噪声像素块的值为$f(x,y)$，加性噪声为$n(x,y)$,那么添加噪声后的像素块的值为$g(x,y)=f(x,y)+n(x,y)$。我们把多个相似的像素块进行叠加后取均值得到$\overline{g}(x,y)=\frac{1}{K}\sum_{i=1}^{K}g_i(x,y)$。此处应注意相似是个模糊的概念，以量化的观点看是两个相似块间的距离大小，这个距离可以是欧式距离等，为了对原理进行粗略的说明，下面的推导中把相似的概念强化了。应用概率的观点，我们对叠加处理取平均后的像素块求期望得到，$$E[{\overline{g}(x,y)]}=\frac{1}{K}\sum_{i=1}^{K}(E[f_i(x,y)]+E[n(x,y)])$$.<br>由于像素块的相似性，上式中右边式子的第一项化简为$f(x,y)$，第二项由于假设噪声的均值为0，所以$$E[\overline{g}(x,y)]=f(x,y)$$.另外由于噪声的非相关性，我们可以得到$g(x,y)$的方差计算公式为$${\sigma_{\overline{g}}}^2={\sigma_f}^2+\frac{1}{K^2}({\sigma_{\eta_1}}^2+{\sigma_{\eta_2}}^2+\dots+{\sigma_{\eta_{K}}}^2)$$<br>所以，最后推导出的方差为：<br>$${\sigma_{\overline{g}}}^2=\frac{K}{K^2}{\sigma_{\eta}}^2=\frac{1}{K}{\sigma_{\eta}}^2$$.<br>其中${\sigma_f}^2$为无噪声的像素块的方差值为0.</p>
-<p>由此可见，通过非局部均值的方法可以进行图像的去噪。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文是在阅读论文<a href="http://www.ipol.im/pub/art/2011/bcm_nlm/" target="_blank" rel="external">“Non-Local Means Denoising”</a>后编写的，其中的假设推倒参考了圣经《数字图像处理》,若有错误，欢迎讨论。该博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>模板是C++的一块重要内容，在模板中比较复杂的就是可变参数模板。这篇文章主要通过三个实例来进行可变参数模板的学习，包括类模板和函数模板，其中涉及到模板递归和模板的特化与偏特化。</p>
+<h2 id="类模板"><a href="#类模板" class="headerlink" title="类模板"></a>类模板</h2><p>下面是一个打印tuple元素的例子，例如我们创建了一个tuple为make_tuple(5, “hello”, bitset<16>(80))，那么打印输出为{5,hello,0000000001010000}。当然写程序的方法有很多，下面的代码只是为了学习可变参数的类模板实例。</16></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">int</span> id, <span class="keyword">int</span> Max, <span class="keyword">typename</span>... Args&gt;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">print_tuple</span> //类模板</span></div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(ostream &amp;os, <span class="keyword">const</span> tuple&lt;Args...&gt; &amp;t)</span></span></div><div class="line">	&#123;</div><div class="line">		os &lt;&lt; get&lt;id&gt;(t) &lt;&lt; (id + <span class="number">1</span> == Max ? <span class="string">""</span> : <span class="string">","</span>);</div><div class="line">		print_tuple&lt;id + <span class="number">1</span>, <span class="keyword">sizeof</span>...(Args), Args...&gt;::print(os, t);<span class="comment">//递归调用函数的同时，也会创建类（实例化），</span></div><div class="line">		<span class="comment">//这个过程中id会不断加1，直到前两个类型参数相同时会调用偏特化模板</span></div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">int</span> Max, <span class="keyword">typename</span>... Args&gt;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">print_tuple</span>&lt;Max, Max, Args...&gt; // 偏特化模板</span></div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	<span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(ostream &amp;os, <span class="keyword">const</span> tuple&lt;Args...&gt; &amp;t)</span></span></div><div class="line">	&#123;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</div><div class="line">ostream &amp;<span class="keyword">operator</span>&lt;&lt;(ostream &amp;os, <span class="keyword">const</span> tuple&lt;Args...&gt; &amp;t)</div><div class="line">&#123;</div><div class="line">	os &lt;&lt; <span class="string">"&#123;"</span>;</div><div class="line">	print_tuple&lt;<span class="number">0</span>, <span class="keyword">sizeof</span>...(Args), Args...&gt;::print(os, t);</div><div class="line">	<span class="keyword">return</span> os &lt;&lt; <span class="string">"&#125;"</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面这个例子是在递归实例化类模板。下面是一个递归继承的类模板，和上面的实例相比要更复杂一点，我们在这个例子中表述的继承关系如图所示：<br><img src="https://github.com/chenlongxiabc/MarkdownPhotos/raw/master/variadic_template.png" alt="variadic_template"><br>实例代码如下，设计巧妙的地方在于构造函数存在递归调用关系，而不是创建临时对象。<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Values&gt; <span class="class"><span class="keyword">class</span> <span class="title">my_tuple</span>;</span> <span class="comment">//通用版本</span></div><div class="line"><span class="keyword">template</span> &lt;&gt; <span class="class"><span class="keyword">class</span> <span class="title">my_tuple</span>&lt;&gt; &#123;</span>&#125;; <span class="comment">// 特例化版本</span></div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Head, <span class="keyword">typename</span>... Tail&gt;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">my_tuple</span>&lt;Head, Tail...&gt; :</span> <span class="keyword">private</span> my_tuple&lt;Tail...&gt;</div><div class="line">&#123;</div><div class="line">	<span class="keyword">typedef</span> my_tuple&lt;Tail...&gt; inherited;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">	my_tuple() &#123;&#125;</div><div class="line">	my_tuple(Head v, Tail... vtail) : m_head(v), inherited(vtail...) &#123;&#125; <span class="comment">//调用类模板的构造函数</span></div><div class="line"></div><div class="line">	<span class="function">Head <span class="title">head</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> m_head; &#125;</div><div class="line">	<span class="function">inherited&amp; <span class="title">tail</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> *<span class="keyword">this</span>; &#125; <span class="comment">//子类对象转化成父类引用</span></div><div class="line"><span class="keyword">protected</span>:</div><div class="line">	Head m_head;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<h2 id="函数模板"><a href="#函数模板" class="headerlink" title="函数模板"></a>函数模板</h2><p>函数模板没有偏特化一说，主要是全特化和普通的函数模板。下面的实例实现了一个简单的功能就是print(12, 30.90, “he”)，代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></div><div class="line"><span class="title">void</span> <span class="title">print</span>(<span class="title">const</span> <span class="title">T</span> &amp;<span class="title">t</span>) // 这是递归调用结束的条件</div><div class="line">&#123;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; t &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="keyword">const</span> T &amp;t, <span class="keyword">const</span> Args&amp;... args)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; t &lt;&lt; <span class="string">" "</span>;</div><div class="line">	print(args...);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>应该说函数模板和类模板相比起来要容易很多，但是需要注意递归结束的条件，把握这一点应该就没有太大的问题。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
 
       
     </div>
@@ -436,7 +440,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Denoising/" rel="tag"># Denoising</a>
+            <a href="/tags/C/" rel="tag"># C++</a>
           
         </div>
       
@@ -449,8 +453,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/07/25/hello-world/" rel="next" title="支持向量机">
-                <i class="fa fa-chevron-left"></i> 支持向量机
+              <a href="/2018/01/03/STL源码分析hash-function/" rel="next" title="STL源码分析hash_function">
+                <i class="fa fa-chevron-left"></i> STL源码分析hash_function
               </a>
             
           </div>
@@ -458,10 +462,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/08/09/投影矩阵和最小二乘/" rel="prev" title="投影矩阵与最小二乘">
-                投影矩阵与最小二乘 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -637,7 +637,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原理分析推导"><span class="nav-number">2.</span> <span class="nav-text">原理分析推导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#类模板"><span class="nav-number">1.1.</span> <span class="nav-text">类模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数模板"><span class="nav-number">1.2.</span> <span class="nav-text">函数模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#声明"><span class="nav-number">1.3.</span> <span class="nav-text">声明</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -785,9 +785,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2017/07/25/图像非局部均值滤波的原理/';
-          this.page.identifier = '2017/07/25/图像非局部均值滤波的原理/';
-          this.page.title = '图像非局部均值滤波的原理';
+          this.page.url = 'http://yoursite.com/2018/01/11/可变参数模板的两个实例/';
+          this.page.identifier = '2018/01/11/可变参数模板的两个实例/';
+          this.page.title = '可变参数模板的两个实例';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://chenlongxiabc.disqus.com/embed.js';
