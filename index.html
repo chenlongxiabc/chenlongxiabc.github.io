@@ -273,6 +273,183 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/17/C-内存分配new-delete/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="chenlongxi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/Fulan.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chen">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/17/C-内存分配new-delete/" itemprop="url">C++内存分配new/delete</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-17T09:49:42+08:00">
+                2018-01-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/17/C-内存分配new-delete/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count"
+                        data-disqus-identifier="2018/01/17/C-内存分配new-delete/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/01/17/C-内存分配new-delete/" class="leancloud_visitors" data-flag-title="C++内存分配new/delete">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>在C语言中内存的分配与释放使用的函数是malloc与free。C++中有了类和对象，我们常用new和delete来新建和释放对象。至于new和delete的背后到底是什么，这篇文章做了个简单的记录。</p>
+<h2 id="new对象过程"><a href="#new对象过程" class="headerlink" title="new对象过程"></a>new对象过程</h2><p>假设我们定义了一个类Complex，下面的代码是新建一个Complex对象的过程代码。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Complex *pc = <span class="keyword">new</span> Complex(<span class="number">1</span>,<span class="number">2</span>);</div></pre></td></tr></table></figure>
+<p>编译器会转为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> *mem = <span class="keyword">operator</span> <span class="keyword">new</span>(<span class="keyword">sizeof</span>(Complex));</div><div class="line">pc = <span class="keyword">static_cast</span>&lt;Complex *&gt;(mem);</div><div class="line">pc-&gt;Complex::Complex(<span class="number">1</span>,<span class="number">2</span>); <span class="comment">//调用构造函数，只有编译器才能这样做</span></div></pre></td></tr></table></figure>
+<p>上面代码中operator new叫操作符，其实是函数用来内存分配的，调用了malloc函数，源代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> *<span class="keyword">operator</span> <span class="title">new</span><span class="params">(<span class="keyword">size_t</span> size, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="keyword">nothrow_t</span> &amp;)</span> _<span class="title">THROW0</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">void</span> *p;</div><div class="line">    <span class="keyword">while</span> ((p = <span class="built_in">malloc</span>(size)) == <span class="number">0</span>)</div><div class="line">    &#123;</div><div class="line">        _<span class="function">TRY_BEGIN</span></div><div class="line">        <span class="title">if</span> <span class="params">(_callnewh(size)</span> == <span class="number">0</span>) <span class="keyword">break</span>;</div><div class="line">        _CATCH(<span class="built_in">std</span>::bad_alloc) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        _CATCH_END</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> (p);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上述代码中如果内存分配成功，指针p不为空会指向分配出的内存首地址，分配不成功，返回空指针执行循环体。</p>
+<h2 id="delete对象过程"><a href="#delete对象过程" class="headerlink" title="delete对象过程"></a>delete对象过程</h2><p>释放掉pc所指对象的代码是delete pc。那么编译器会把这句代码转为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pc-&gt;~Complex(); <span class="comment">//先调用析构函数，说明内存的释放不是在析构函数中</span></div><div class="line"><span class="function"><span class="keyword">operator</span> <span class="title">delete</span><span class="params">(pc)</span></span>; <span class="comment">//释放内存</span></div></pre></td></tr></table></figure>
+<p>operator delete实际的操作是调用free来释放内存</p>
+<p>``` cpp<br>void __cdecl operator delete(void *p) _THROW0()<br>{<br>    free(p);<br>}</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是对C++内存分配释放中new/delete函数的说明，后面还会写文章对标准库allocator进行一定的分析。</p>
+<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/11/可变参数模板的两个实例/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1813,171 +1990,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/27/Deep-Learning-的思考/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="chenlongxi">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/Fulan.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chen">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/27/Deep-Learning-的思考/" itemprop="url">Deep Learning 的思考</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-27T14:45:58+08:00">
-                2017-11-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/think-notes/" itemprop="url" rel="index">
-                    <span itemprop="name">think notes</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/27/Deep-Learning-的思考/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2017/11/27/Deep-Learning-的思考/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2017/11/27/Deep-Learning-的思考/" class="leancloud_visitors" data-flag-title="Deep Learning 的思考">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>深度学习的浪潮已向我们袭来已久，可惜自己的研究方向不是深度学习，倍感惋惜。最近在和同学讨论时，对深度学习方法和传统方法进行了一些思考。现在，我做的仍然是传统的研究方法，在传统方法中，我们趋向于用简单的公式，优化函数等将问题进行建模，然后去寻找最优解。这样的方法简单，有较好的理论基础，并且我们发现这些方法可以适合很多实际应用中的问题，也就是说泛化性能更强。传统的方法更符合我们的认知，即偏向于把复杂的问题进行归纳，简化，然后进行建模求解。传统的方法研究多年，性能提升越来越慢，甚至有的已经到了瓶颈。后来深度学习的方法出现，又刷新了我们新的认知，但是深度学习的理论基础却相对薄弱，这两者对比其实是个有意思的事情。<br>传统的方法公式函数简单，因此描述能力有限，而各种问题也许并不是我们想像的那么直接。我们以前学过的定理公式很简单优美，但是在有些方面却有着很多近似条件的约束，因此要想精确的描述问题，公式还是会偏向复杂化。深度学习方法中，我把它看作是很多个基函数的组合，这些函数组合在一起经过训练最终能描述一个复杂的问题，至于理论这也许就很难去归纳，推倒。但是，它却能通过函数的组合，网络深度的加深来更好地描述问题，从而也能更好的去解决问题。深度学习方法也有其局限，复杂的东西可能对特定问题解决能力更强，但是对另外的相似问题可能不怎么work，也就是说神经网络需要对特定问题进行训练，它的泛化能力较弱。<br>我认为深度学习方法是一种更直接的认知问题的方式，问题本身也许就是复杂的，那就用复杂的方法去建模求解，至于理论，很难通过单纯的数学建模问题去解释。目前，我们传统方法的发展也是在偏向复杂化，很多时候，我们发现多加一些约束，或者多设置一些参数，可能就会达到比以前更好的效果。未来，也许就是这样，特定问题用特殊的方法去求解，而不是用一套方法去解决很多问题。</p>
-<h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。该博客欢迎分享，转载，但请声明出处，严禁抄袭，仅用于学习。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2028,7 +2040,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-count">24</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

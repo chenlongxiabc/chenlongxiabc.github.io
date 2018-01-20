@@ -94,18 +94,18 @@
 
 
 
-<meta name="description" content="简介istream_iterator和ostream_iterator是两个迭代器主要用来输入输出。istream_iterator允许使用懒惰求值，标准库不保证迭代器立即从流读取数据，具体实现中可以推迟从流中读取数据，直到我们使用迭代器时才真正读取，例如需要解引用时。ostream_iterator是write only的，所以不能有类似ostream_iter != pointer的操作。另外">
+<meta name="description" content="简介在C语言中内存的分配与释放使用的函数是malloc与free。C++中有了类和对象，我们常用new和delete来新建和释放对象。至于new和delete的背后到底是什么，这篇文章做了个简单的记录。 new对象过程假设我们定义了一个类Complex，下面的代码是新建一个Complex对象的过程代码。 1Complex *pc = new Complex(1,2); 编译器会转为： 123voi">
 <meta name="keywords" content="STL,C++">
 <meta property="og:type" content="article">
-<meta property="og:title" content="STL源码分析ostream_iterator和istream_iterator">
-<meta property="og:url" content="http://yoursite.com/2018/01/03/STL源码分析ostream-iterator和istream-iterator/index.html">
+<meta property="og:title" content="C++内存分配new&#x2F;delete">
+<meta property="og:url" content="http://yoursite.com/2018/01/17/C-内存分配new-delete/index.html">
 <meta property="og:site_name" content="Chen">
-<meta property="og:description" content="简介istream_iterator和ostream_iterator是两个迭代器主要用来输入输出。istream_iterator允许使用懒惰求值，标准库不保证迭代器立即从流读取数据，具体实现中可以推迟从流中读取数据，直到我们使用迭代器时才真正读取，例如需要解引用时。ostream_iterator是write only的，所以不能有类似ostream_iter != pointer的操作。另外">
+<meta property="og:description" content="简介在C语言中内存的分配与释放使用的函数是malloc与free。C++中有了类和对象，我们常用new和delete来新建和释放对象。至于new和delete的背后到底是什么，这篇文章做了个简单的记录。 new对象过程假设我们定义了一个类Complex，下面的代码是新建一个Complex对象的过程代码。 1Complex *pc = new Complex(1,2); 编译器会转为： 123voi">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-03T11:39:41.913Z">
+<meta property="og:updated_time" content="2018-01-20T11:13:55.459Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="STL源码分析ostream_iterator和istream_iterator">
-<meta name="twitter:description" content="简介istream_iterator和ostream_iterator是两个迭代器主要用来输入输出。istream_iterator允许使用懒惰求值，标准库不保证迭代器立即从流读取数据，具体实现中可以推迟从流中读取数据，直到我们使用迭代器时才真正读取，例如需要解引用时。ostream_iterator是write only的，所以不能有类似ostream_iter != pointer的操作。另外">
+<meta name="twitter:title" content="C++内存分配new&#x2F;delete">
+<meta name="twitter:description" content="简介在C语言中内存的分配与释放使用的函数是malloc与free。C++中有了类和对象，我们常用new和delete来新建和释放对象。至于new和delete的背后到底是什么，这篇文章做了个简单的记录。 new对象过程假设我们定义了一个类Complex，下面的代码是新建一个Complex对象的过程代码。 1Complex *pc = new Complex(1,2); 编译器会转为： 123voi">
 
 
 
@@ -134,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/01/03/STL源码分析ostream-iterator和istream-iterator/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/17/C-内存分配new-delete/"/>
 
 
 
 
 
-  <title>STL源码分析ostream_iterator和istream_iterator | Chen</title>
+  <title>C++内存分配new/delete | Chen</title>
   
 
 
@@ -273,7 +273,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/03/STL源码分析ostream-iterator和istream-iterator/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/17/C-内存分配new-delete/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="chenlongxi">
@@ -290,7 +290,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">STL源码分析ostream_iterator和istream_iterator</h1>
+          <h1 class="post-title" itemprop="name headline">C++内存分配new/delete</h1>
         
 
         <div class="post-meta">
@@ -302,8 +302,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-03T15:17:25+08:00">
-                2018-01-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-17T09:49:42+08:00">
+                2018-01-17
               </time>
             
 
@@ -343,9 +343,9 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/03/STL源码分析ostream-iterator和istream-iterator/#comments" itemprop="discussionUrl">
+                <a href="/2018/01/17/C-内存分配new-delete/#comments" itemprop="discussionUrl">
                   <span class="post-comments-count disqus-comment-count"
-                        data-disqus-identifier="2018/01/03/STL源码分析ostream-iterator和istream-iterator/" itemprop="commentCount"></span>
+                        data-disqus-identifier="2018/01/17/C-内存分配new-delete/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -353,7 +353,7 @@
 
           
           
-             <span id="/2018/01/03/STL源码分析ostream-iterator和istream-iterator/" class="leancloud_visitors" data-flag-title="STL源码分析ostream_iterator和istream_iterator">
+             <span id="/2018/01/17/C-内存分配new-delete/" class="leancloud_visitors" data-flag-title="C++内存分配new/delete">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -384,15 +384,19 @@
       
 
       
-        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>istream_iterator和ostream_iterator是两个迭代器主要用来输入输出。istream_iterator允许使用懒惰求值，标准库不保证迭代器立即从流读取数据，具体实现中可以推迟从流中读取数据，直到我们使用迭代器时才真正读取，例如需要解引用时。ostream_iterator是write only的，所以不能有类似<em>ostream_iter != </em>pointer的操作。另外分隔符必须是<strong>字符串</strong>。必须将ostream_iterator绑定到一个指定的流，不允许空的或表示尾后位置的ostream_iterator。</p>
-<h2 id="ostream-iterator"><a href="#ostream-iterator" class="headerlink" title="ostream_iterator"></a>ostream_iterator</h2><p>下面是ostream_iterator的类模板源码：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">char</span> <span class="title">T</span> = <span class="title">char</span>, <span class="title">class</span> <span class="title">traits</span> = <span class="title">char_traits</span>&lt;charT&gt;&gt;</span></div><div class="line"><span class="title">class</span> <span class="title">ostream_iterator</span> : <span class="keyword">public</span> iterator&lt;output_iterator_tag, <span class="keyword">void</span>, <span class="keyword">void</span>, <span class="keyword">void</span>, <span class="keyword">void</span>&gt;</div><div class="line">&#123;</div><div class="line">    basic_ostream&lt;charT, traits&gt; *out_stream;</div><div class="line">    <span class="keyword">const</span> charT* delim;</div><div class="line"></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">typedef</span> charT char_type;</div><div class="line">    <span class="keyword">typedef</span> traits traits_type;</div><div class="line">    <span class="keyword">typedef</span> basic_ostream&lt;charT, traits&gt; ostream_type;</div><div class="line">    ostream_iterator(ostream_type &amp;s) : out_stream(&amp;s), delim(<span class="number">0</span>) &#123;&#125;</div><div class="line">    ostream_iterator(ostream_type &amp;s, <span class="keyword">const</span> charT *delimiter) : out_stream(x.out_stream), delim(x.delim) &#123;&#125;</div><div class="line">    ~ostream_iterator()&#123;&#125;</div><div class="line">    ostream_iterator&lt;T, charT, traits&gt; &amp;<span class="keyword">operator</span>=(<span class="keyword">const</span> T &amp;value)</div><div class="line">    &#123;</div><div class="line">        *out_stream &lt;&lt; value;</div><div class="line">        <span class="keyword">if</span> (delim != <span class="number">0</span>) *out_stream &lt;&lt; delim;</div><div class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">    &#125;</div><div class="line">    ostream_iterator&lt;T, charT, traits&gt; &amp;<span class="keyword">operator</span>*() &#123;<span class="keyword">return</span> *<span class="keyword">this</span>; &#125;</div><div class="line">    ostream_iterator&lt;T, charT, traits&gt; &amp;<span class="keyword">operator</span>++() &#123;<span class="keyword">return</span> *<span class="keyword">this</span>; &#125;</div><div class="line">    ostream_iterator&lt;T, charT, traits&gt; &amp;<span class="keyword">operator</span>++(<span class="keyword">int</span>) &#123;<span class="keyword">return</span> *<span class="keyword">this</span>; &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>从源代码中可以看到，outstream是一个basic_outstream指针，对于ostream_iterator（假设out为其对象），*out、out++、++out操作相同，都是返回的out。</p>
-<p>下面是一个实际调用的例子：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">std</span>::ostream_iterator&lt;<span class="keyword">int</span>&gt; out_it(<span class="built_in">std</span>::<span class="built_in">cout</span>, <span class="string">","</span>);</div><div class="line"><span class="built_in">std</span>::copy(myvector.begin(), myvector.end(), out_it);</div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">InputIterator</span>, <span class="title">class</span> <span class="title">OutputIterator</span>&gt;</span></div><div class="line"><span class="title">OutputIterator</span> <span class="title">copy</span>(<span class="title">InputIterator</span> <span class="title">first</span>, <span class="title">InputIterator</span> <span class="title">last</span>, <span class="title">OutputIterator</span> <span class="title">result</span>)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">while</span> (first != last)</div><div class="line">    &#123;</div><div class="line">        *result = *first; <span class="comment">// 相当于两条语句 cout &lt;&lt; *first; cout &lt;&lt; ",";</span></div><div class="line">        ++result; ++first;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里++result是没有作用的，因为每次赋值时就会提交写操作，不需要移动迭代器。</p>
-<h2 id="istream-iterator"><a href="#istream-iterator" class="headerlink" title="istream_iterator"></a>istream_iterator</h2><p>对于istream_iterator的分析在下面源代码的注释中进行了部分解析。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">istream_iterator&lt;<span class="keyword">double</span>&gt; eos; <span class="comment">// end of stream iterator，调用构造函数1</span></div><div class="line">istream_iterator&lt;<span class="keyword">double</span>&gt; iit(<span class="built_in">cin</span>); <span class="comment">// 调用构造函数2，创建时已经发生了读取操作，value被赋值</span></div><div class="line"><span class="keyword">if</span> (iit != eos) value1 = *iit; <span class="comment">// 把读取的值赋值给value1；</span></div><div class="line">++iit; <span class="comment">// 读取下一个值存到iit中。</span></div><div class="line"><span class="keyword">if</span> (iit != eos) value2 = *iit; <span class="comment">// 把读取的值赋值给value2；</span></div><div class="line"></div><div class="line"><span class="built_in">cout</span> &lt;&lt; value1 &lt;&lt; <span class="string">"*"</span> &lt;&lt; value2 &lt;&lt; <span class="string">"="</span> &lt;&lt; value1 * value2 &lt;&lt; <span class="built_in">endl</span>;</div><div class="line"></div><div class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>, <span class="title">class</span> <span class="title">charT</span> = <span class="title">char</span>, <span class="title">class</span> <span class="title">traits</span> = <span class="title">char_traits</span>&lt;charT&gt;, <span class="title">class</span> <span class="title">Distance</span> = <span class="title">ptrdiff_t</span>&gt;</span></div><div class="line"><span class="title">class</span> <span class="title">istream_iterator</span> : <span class="keyword">public</span> iterator &lt;input_iterator_tag, T, Distance, <span class="keyword">const</span> T*, <span class="keyword">const</span> T&amp;&gt;</div><div class="line">&#123;</div><div class="line">    basic_istream&lt;chatT, traits&gt; *in_stream;</div><div class="line">    T value;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="keyword">typedef</span> charT char_type;</div><div class="line">    <span class="keyword">typedef</span> traits traits_type;</div><div class="line">    <span class="keyword">typedef</span> basic_istream&lt;charT, traits&gt; istream_type;</div><div class="line">    istream_iterator():in_stream(<span class="number">0</span>) &#123;&#125; <span class="comment">//构造函数1</span></div><div class="line">    istream_iterator(istream_type &amp;s) : in_stream(&amp;s) &#123; ++*<span class="keyword">this</span>; &#125; <span class="comment">//构造函数2，调用operator++()</span></div><div class="line">    istream_iterator(<span class="keyword">const</span> istream iterator&lt;T, charT, traits, Distance&gt; &amp;x) <span class="comment">//构造函数3</span></div><div class="line">    : in_stream(x.in_stream), value(x.value);</div><div class="line"></div><div class="line">    <span class="keyword">const</span> T&amp; <span class="keyword">operator</span>*() <span class="keyword">const</span> &#123;<span class="keyword">return</span> value; &#125;</div><div class="line">    <span class="keyword">const</span> T* <span class="keyword">operator</span>-&gt;() <span class="keyword">const</span> &#123;<span class="keyword">return</span> &amp;value; &#125;</div><div class="line">    istream_iterator&lt;T, chatT, traits, Distance&gt; &amp;<span class="keyword">operator</span>++()</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (in_stream &amp;&amp; !(*in_stream &gt;&gt; value)) in_stream = <span class="number">0</span>;</div><div class="line">        <span class="keyword">return</span> *<span class="keyword">this</span>;</div><div class="line">    &#125;</div><div class="line">    istream_iterator&lt;T, charT, traits, Distance&gt; <span class="keyword">operator</span>++(<span class="keyword">int</span>)</div><div class="line">    &#123;</div><div class="line">        istream_iterator&lt;T, charT, traits, Distance&gt; tmp = *<span class="keyword">this</span>;</div><div class="line">        ++*<span class="keyword">this</span>;</div><div class="line">        <span class="keyword">return</span> tmp;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>在C语言中内存的分配与释放使用的函数是malloc与free。C++中有了类和对象，我们常用new和delete来新建和释放对象。至于new和delete的背后到底是什么，这篇文章做了个简单的记录。</p>
+<h2 id="new对象过程"><a href="#new对象过程" class="headerlink" title="new对象过程"></a>new对象过程</h2><p>假设我们定义了一个类Complex，下面的代码是新建一个Complex对象的过程代码。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Complex *pc = <span class="keyword">new</span> Complex(<span class="number">1</span>,<span class="number">2</span>);</div></pre></td></tr></table></figure>
+<p>编译器会转为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> *mem = <span class="keyword">operator</span> <span class="keyword">new</span>(<span class="keyword">sizeof</span>(Complex));</div><div class="line">pc = <span class="keyword">static_cast</span>&lt;Complex *&gt;(mem);</div><div class="line">pc-&gt;Complex::Complex(<span class="number">1</span>,<span class="number">2</span>); <span class="comment">//调用构造函数，只有编译器才能这样做</span></div></pre></td></tr></table></figure>
+<p>上面代码中operator new叫操作符，其实是函数用来内存分配的，调用了malloc函数，源代码如下：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> *<span class="keyword">operator</span> <span class="title">new</span><span class="params">(<span class="keyword">size_t</span> size, <span class="keyword">const</span> <span class="built_in">std</span>::<span class="keyword">nothrow_t</span> &amp;)</span> _<span class="title">THROW0</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">void</span> *p;</div><div class="line">    <span class="keyword">while</span> ((p = <span class="built_in">malloc</span>(size)) == <span class="number">0</span>)</div><div class="line">    &#123;</div><div class="line">        _<span class="function">TRY_BEGIN</span></div><div class="line">        <span class="title">if</span> <span class="params">(_callnewh(size)</span> == <span class="number">0</span>) <span class="keyword">break</span>;</div><div class="line">        _CATCH(<span class="built_in">std</span>::bad_alloc) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        _CATCH_END</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> (p);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上述代码中如果内存分配成功，指针p不为空会指向分配出的内存首地址，分配不成功，返回空指针执行循环体。</p>
+<h2 id="delete对象过程"><a href="#delete对象过程" class="headerlink" title="delete对象过程"></a>delete对象过程</h2><p>释放掉pc所指对象的代码是delete pc。那么编译器会把这句代码转为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pc-&gt;~Complex(); <span class="comment">//先调用析构函数，说明内存的释放不是在析构函数中</span></div><div class="line"><span class="function"><span class="keyword">operator</span> <span class="title">delete</span><span class="params">(pc)</span></span>; <span class="comment">//释放内存</span></div></pre></td></tr></table></figure>
+<p>operator delete实际的操作是调用free来释放内存</p>
+<p>``` cpp<br>void __cdecl operator delete(void *p) _THROW0()<br>{<br>    free(p);<br>}</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是对C++内存分配释放中new/delete函数的说明，后面还会写文章对标准库allocator进行一定的分析。</p>
 <h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
 
       
@@ -455,8 +459,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/02/STL源码分析inserter/" rel="next" title="STL源码分析reverse_iterator和inserter">
-                <i class="fa fa-chevron-left"></i> STL源码分析reverse_iterator和inserter
+              <a href="/2018/01/11/可变参数模板的两个实例/" rel="next" title="可变参数模板的两个实例">
+                <i class="fa fa-chevron-left"></i> 可变参数模板的两个实例
               </a>
             
           </div>
@@ -464,10 +468,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/03/STL源码分析hash-function/" rel="prev" title="STL源码分析hash_function">
-                STL源码分析hash_function <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -643,7 +643,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ostream-iterator"><span class="nav-number">1.1.</span> <span class="nav-text">ostream_iterator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#istream-iterator"><span class="nav-number">1.2.</span> <span class="nav-text">istream_iterator</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#声明"><span class="nav-number">1.3.</span> <span class="nav-text">声明</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#new对象过程"><span class="nav-number">1.1.</span> <span class="nav-text">new对象过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#delete对象过程"><span class="nav-number">1.2.</span> <span class="nav-text">delete对象过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#声明"><span class="nav-number">1.4.</span> <span class="nav-text">声明</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -791,9 +791,9 @@
     
       <script type="text/javascript">
         var disqus_config = function () {
-          this.page.url = 'http://yoursite.com/2018/01/03/STL源码分析ostream-iterator和istream-iterator/';
-          this.page.identifier = '2018/01/03/STL源码分析ostream-iterator和istream-iterator/';
-          this.page.title = 'STL源码分析ostream_iterator和istream_iterator';
+          this.page.url = 'http://yoursite.com/2018/01/17/C-内存分配new-delete/';
+          this.page.identifier = '2018/01/17/C-内存分配new-delete/';
+          this.page.title = 'C++内存分配new/delete';
         };
         var d = document, s = d.createElement('script');
         s.src = 'https://chenlongxiabc.disqus.com/embed.js';
