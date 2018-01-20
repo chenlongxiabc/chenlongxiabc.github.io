@@ -399,7 +399,7 @@
 <h2 id="delete对象过程"><a href="#delete对象过程" class="headerlink" title="delete对象过程"></a>delete对象过程</h2><p>释放掉pc所指对象的代码是delete pc。那么编译器会把这句代码转为：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">pc-&gt;~Complex(); <span class="comment">//先调用析构函数，说明内存的释放不是在析构函数中</span></div><div class="line"><span class="function"><span class="keyword">operator</span> <span class="title">delete</span><span class="params">(pc)</span></span>; <span class="comment">//释放内存</span></div></pre></td></tr></table></figure>
 <p>operator delete实际的操作是调用free来释放内存</p>
-<p>``` cpp<br>void __cdecl operator delete(void *p) _THROW0()<br>{<br>    free(p);<br>}</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> __<span class="function">cdecl <span class="keyword">operator</span> <span class="title">delete</span><span class="params">(<span class="keyword">void</span> *p)</span> _<span class="title">THROW0</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="built_in">free</span>(p);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是对C++内存分配释放中new/delete函数的说明，后面还会写文章对标准库allocator进行一定的分析。</p>
 <h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>若有错误，欢迎讨论。严禁抄袭，仅用于学习。</p>
 
